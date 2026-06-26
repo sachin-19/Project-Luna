@@ -1,0 +1,7 @@
+{
+  "latest_version": "1.0.0",
+  "min_supported_version": "1.0.0",
+  "mandatory": false,
+  "download_url": "https://your-cdn.example.com/luna/luna-1.0.0.apk",
+  "release_notes": "First release of Luna — period & cycle tracker."
+}

@@ -1,0 +1,24 @@
+# Build outputs
+luna/build/
+luna/android/app/release/
+luna/android/app/debug/
+
+# Flutter tool internals
+luna/.dart_tool/
+luna/.flutter-plugins-dependencies
+luna/.pub-cache/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sensitive — keep local only
+luna/android/app/google-services.json
+luna/android/local.properties
+
+# Dart generated files are committed intentionally (app project, not a package)

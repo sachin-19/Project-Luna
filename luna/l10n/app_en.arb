@@ -1,0 +1,162 @@
+{
+  "@@locale": "en",
+
+  "appName": "Luna",
+
+  "phaseMenstrual": "Menstrual Phase",
+  "phaseFollicular": "Follicular Phase",
+  "phaseOvulation": "Ovulation Phase",
+  "phaseLuteal": "Luteal Phase",
+
+  "copyMenstrual": "Rest. Your body is doing powerful work.",
+  "copyFollicular": "Energy is building. A good time to start things.",
+  "copyOvulation": "You're at your peak. Make the most of it.",
+  "copyLuteal": "Wind down gently. Nourish yourself.",
+
+  "cycleDay": "Day {day} of cycle",
+  "@cycleDay": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  },
+
+  "nextPeriodIn": "Period expected in {days} days",
+  "@nextPeriodIn": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "nextPeriodRange": "Expected {range}",
+  "@nextPeriodRange": {
+    "placeholders": {
+      "range": { "type": "String" }
+    }
+  },
+
+  "logPeriod": "Log Period",
+  "logSymptoms": "Log Symptoms",
+  "logMood": "Log Mood",
+  "done": "Done",
+  "skip": "Skip for now",
+  "next": "Next",
+  "back": "Back",
+  "save": "Save",
+  "cancel": "Cancel",
+  "later": "Later",
+
+  "flowSpotting": "Spotting",
+  "flowLight": "Light",
+  "flowMedium": "Medium",
+  "flowHeavy": "Heavy",
+
+  "symptomCramps": "Cramps",
+  "symptomHeadache": "Headache",
+  "symptomBloating": "Bloating",
+  "symptomFatigue": "Fatigue",
+  "symptomBackPain": "Back Pain",
+  "symptomMoodSwings": "Mood Swings",
+  "symptomBreastTenderness": "Breast Tenderness",
+  "symptomNausea": "Nausea",
+  "symptomAcne": "Acne",
+  "symptomFoodCravings": "Food Cravings",
+  "symptomSleepChanges": "Sleep Changes",
+  "symptomSpotting": "Spotting",
+
+  "moodHappy": "Happy",
+  "moodCalm": "Calm",
+  "moodSad": "Sad",
+  "moodAnxious": "Anxious",
+  "moodIrritable": "Irritable",
+  "moodEnergetic": "Energetic",
+
+  "updateAvailable": "Update available",
+  "updateVersion": "Version {version}",
+  "@updateVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "updateSize": "{size} MB",
+  "@updateSize": {
+    "placeholders": {
+      "size": { "type": "String" }
+    }
+  },
+  "updateDownloadInstall": "Download & Install",
+  "updateDownloading": "Downloading…",
+  "updateLater": "Later",
+  "updateMandatoryTitle": "Required update",
+  "updateMandatoryBody": "Please update Luna to continue.",
+  "updateRequired": "Update required",
+  "updateNow": "Update now",
+  "updateRetry": "Retry",
+  "updateMandatoryNote": "This update is required to continue using Luna.",
+  "updateDownloadFailed": "Download failed. Please try again.",
+
+  "homeTrackYourCycle": "Track your cycle",
+  "homeStartTrackingSubtitle": "Log when your period begins to get started.",
+  "periodStartedToday": "Period started today",
+  "noPeriodInProgress": "No period in progress",
+  "noPeriodStartBelow": "Start your period below to begin logging flow intensity.",
+  "noPeriodStartFromHome": "Start your period from Home to begin tracking, then you can log past dates.",
+
+  "saveLog": "Save log",
+  "flowIntensity": "Flow intensity",
+  "tapFlowLevel": "Tap a flow level to log your period.",
+  "whatAreYouFeeling": "What are you feeling?",
+  "howAreYouFeeling": "How are you feeling?",
+  "severity": "Severity",
+  "energy": "Energy",
+
+  "tabPeriod": "Period",
+  "tabSymptoms": "Symptoms",
+  "tabMood": "Mood",
+
+  "calendarPeriodLogged": "Period logged",
+  "calendarMoodLogged": "Mood / symptoms logged",
+  "calendarPredictedPeriod": "Predicted period",
+  "calendarStartTracking": "Start tracking your period to see phase colours and log history here.",
+
+  "nextPeriodLabel": "Next period",
+  "predictionHighAccuracy": "High accuracy",
+  "predictionLearning": "Learning…",
+  "predictionCyclesTracked": "{count} cycle{count, plural, one{} other{s}} tracked",
+  "@predictionCyclesTracked": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "predictionKeepLogging": "Keep logging to improve predictions",
+  "predictionFixedSchedule": "Based on your pill schedule",
+  "predictionAccuracy": "Predicted {accurate} of last {total} cycles within 3 days",
+  "@predictionAccuracy": {
+    "placeholders": {
+      "accurate": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "logToday": "Log today",
+  "logYesterday": "Log yesterday",
+  "logFor": "Log for {date}",
+  "@logFor": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "logSaveError": "Could not save. Please try again.",
+  "addNoteHint": "Add a note… (optional)",
+
+  "homeCycleStartsHere": "Your cycle starts here",
+  "homeCycleStartsSubtitle": "Log when your period begins to start tracking your health.",
+  "homeStartedFewDaysAgo": "Started a few days ago?",
+  "homePhaseTip": "Phase tip",
+  "homeSeeAll": "See all →",
+
+  "periodEndedToday": "Period ended today",
+  "periodEndConfirmTitle": "End your period?",
+  "periodEndConfirmBody": "Mark today as your last day. Your flow data will be saved.",
+  "periodEndConfirm": "End period",
+  "periodEndedSuccess": "Period marked as ended"
+}

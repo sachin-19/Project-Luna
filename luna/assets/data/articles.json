@@ -1,0 +1,147 @@
+{
+  "articles": [
+    {
+      "id": "basics_01",
+      "title": "What Is the Menstrual Cycle?",
+      "summary": "A complete guide to the four phases and what happens in your body each month.",
+      "topic": "basics",
+      "phases": [],
+      "featured": true,
+      "minAge": 0,
+      "readingTimeMin": 4,
+      "content": "## Your cycle is more than just your period\n\nThe menstrual cycle is a monthly process your body goes through to prepare for a possible pregnancy. It usually lasts between 24 and 38 days — 28 days is the average, but every body is different.\n\nYour cycle is controlled by hormones: mainly oestrogen, progesterone, FSH (follicle-stimulating hormone), and LH (luteinising hormone). These hormones rise and fall in a predictable pattern, driving changes in your energy, mood, skin, and appetite.\n\n## The four phases\n\n**Menstrual phase** (Days 1–5 on average)\nYour period starts on Day 1. The uterine lining sheds because no egg was fertilised. Oestrogen and progesterone are at their lowest. Energy is low — rest is not laziness, it is physiologically appropriate.\n\n**Follicular phase** (Days 1–13, overlaps with menstrual)\nFSH rises, stimulating follicles in the ovaries to grow. One follicle becomes dominant and begins producing oestrogen. Energy, focus, and mood gradually improve as oestrogen climbs.\n\n**Ovulation phase** (Around Day 14)\nA surge of LH triggers the dominant follicle to release an egg. This is your most fertile window — typically one to two days. Some women feel a mild twinge on one side (called mittelschmerz) or notice clearer, stretchy discharge.\n\n**Luteal phase** (Days 15–28)\nThe empty follicle becomes the corpus luteum and secretes progesterone. Progesterone prepares the uterine lining for implantation. If no fertilisation occurs, progesterone drops sharply, triggering your next period. PMS symptoms — bloating, mood changes, fatigue — are most common in the second half of this phase.\n\n## Why tracking matters\n\nWhen you log your cycle consistently, you begin to recognise your own patterns. You may find you sleep worse in the luteal phase, or that your motivation peaks just after your period ends. That awareness is the foundation of everything Luna is built on."
+    },
+    {
+      "id": "basics_02",
+      "title": "Understanding Ovulation",
+      "summary": "When it happens, what you can feel, and why it matters even if you are not trying to conceive.",
+      "topic": "basics",
+      "phases": ["ovulation", "follicular"],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 3,
+      "content": "## What is ovulation?\n\nOvulation is the release of a mature egg from one of your ovaries. It happens roughly in the middle of your cycle — around Day 14 in a 28-day cycle, though this varies widely. Luna estimates your ovulation window based on your personal cycle length data.\n\n## Signs of ovulation\n\n- **Cervical mucus change** — near ovulation, discharge becomes clear, slippery, and stretchy (like raw egg white). This is the most reliable observable sign.\n- **Mild pelvic pain** — some women feel a short cramp or twinge on one side. This is called mittelschmerz (German for 'middle pain').\n- **Elevated basal body temperature** — your resting temperature rises about 0.2°C after ovulation and stays elevated until your next period.\n- **Heightened energy and social confidence** — oestrogen peaks at ovulation; many women report feeling their sharpest and most outgoing.\n\n## Ovulation and contraception\n\nIf you are not trying to conceive, it is important to know that sperm can survive in the female reproductive tract for up to five days. This means you can become pregnant from unprotected sex in the days before ovulation, not just on ovulation day itself.\n\nHormonal contraception typically prevents ovulation entirely. If you track your cycle while on the pill or a hormonal IUD, you will not have a true ovulatory window — Luna will indicate this if you have logged your contraception method.\n\n## Ovulation and your health\n\nIf you rarely or never ovulate (anovulation), periods may become irregular or stop. PCOS is the most common cause of anovulation. Anovulation can also be caused by significant stress, very low body weight, or thyroid conditions. If you notice persistent irregularity, speak with a gynaecologist."
+    },
+    {
+      "id": "basics_03",
+      "title": "What Is PCOS?",
+      "summary": "Polycystic ovary syndrome affects 1 in 10 women. Here is what it means and how it is managed.",
+      "topic": "basics",
+      "phases": [],
+      "featured": false,
+      "minAge": 13,
+      "readingTimeMin": 4,
+      "content": "## What PCOS is — and is not\n\nPolycystic ovary syndrome (PCOS) is a hormonal condition where the ovaries produce higher-than-normal amounts of androgens (male hormones). It affects roughly 10% of women of reproductive age and is one of the most common causes of irregular periods.\n\nDespite the name, you do not need to have cysts on your ovaries to have PCOS — 'polycystic' describes the appearance of multiple small follicles, not true cysts.\n\n## Common signs\n\n- Irregular, infrequent, or prolonged periods\n- Excess hair on the face, chest, or back (hirsutism)\n- Acne, especially along the jaw and chin\n- Hair thinning or male-pattern hair loss\n- Difficulty losing weight or unexplained weight gain\n- Skin darkening in body folds (acanthosis nigricans)\n\nNot everyone with PCOS has all of these signs. Diagnosis is based on at least two of three criteria: irregular ovulation, elevated androgens, and polycystic-appearing ovaries on ultrasound.\n\n## How is it managed?\n\nPCOS has no cure, but symptoms are manageable. Your doctor may suggest:\n\n- **Lifestyle changes** — regular movement and balanced nutrition are the most effective first interventions for metabolic PCOS.\n- **Combined oral contraceptive pill** — regulates periods and reduces androgen-related symptoms.\n- **Metformin** — used when there is insulin resistance alongside PCOS.\n- **Clomiphene or letrozole** — used to stimulate ovulation when trying to conceive.\n\n## Luna and PCOS\n\nIf you flagged PCOS during onboarding, Luna uses a wider prediction range and a PCOS-tuned statistical model. Your cycle may be less predictable — that is expected, and Luna accounts for it honestly rather than giving false confidence."
+    },
+    {
+      "id": "nutrition_01",
+      "title": "What to Eat During Your Period",
+      "summary": "Foods that ease cramps, restore iron, and reduce bloating in the first few days of your cycle.",
+      "topic": "nutrition",
+      "phases": ["menstrual"],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 3,
+      "content": "## Your nutritional needs shift during menstruation\n\nWhen you menstruate, you lose blood — and with it, iron. You also experience elevated prostaglandins (the chemicals that cause cramping), which can cause digestive discomfort and inflammation. Eating with these changes in mind can meaningfully reduce symptoms.\n\n## Prioritise iron-rich foods\n\n- **Haem iron** (better absorbed): lean red meat, chicken, fish\n- **Non-haem iron** (plant-based): dark leafy greens like palak and methi, rajma, masoor dal, tofu, pumpkin seeds\n- **Pair with Vitamin C** to boost absorption: a squeeze of lemon on your dal, or an orange after a meal.\n- **Avoid tea and coffee with meals** — tannins block iron absorption significantly.\n\n## Ease cramps with anti-inflammatory foods\n\n- Omega-3 fatty acids (flaxseed, walnuts, fatty fish) reduce the inflammation behind period pain.\n- Dark chocolate (70%+) provides magnesium, which relaxes uterine muscle contractions.\n- Chamomile and ginger teas have antispasmodic and anti-inflammatory properties.\n\n## Reduce bloating\n\n- Stay well hydrated — water helps reduce water retention, counterintuitively.\n- Limit high-sodium snacks and processed foods.\n- Warm, easily digestible foods (khichdi, soups, stews) are gentler on the gut when cramping.\n\n## What to limit\n\n- Caffeine can worsen menstrual cramps by constricting blood vessels.\n- Alcohol increases prostaglandin production — may worsen pain.\n- High-sugar foods cause blood sugar spikes that can amplify mood swings."
+    },
+    {
+      "id": "nutrition_02",
+      "title": "Eating for Hormonal Balance",
+      "summary": "A phase-by-phase guide to supporting your hormones through food.",
+      "topic": "nutrition",
+      "phases": [],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 5,
+      "content": "## Your nutritional sweet spot changes across the month\n\nHormones fluctuate significantly across your cycle, and what your body needs to feel its best shifts with them. This guide covers the key nutritional focus for each phase.\n\n## Menstrual phase — restore and soothe\n\nFocus: iron, magnesium, anti-inflammatories.\n\nEat: dark leafy greens, legumes, nuts, seeds, omega-3-rich fish. Avoid: excess caffeine, alcohol, and high-sodium foods.\n\n## Follicular phase — build and energise\n\nFocus: oestrogen metabolism and energy.\n\nOestrogen rises in this phase, and cruciferous vegetables (broccoli, cauliflower, kale, cabbage) contain indole-3-carbinol, which supports healthy oestrogen metabolism. Fermented foods like dahi, kefir, and idli support gut health, which is closely tied to hormone regulation.\n\n**Best time for:** higher-carbohydrate whole foods, raw salads, sprouts.\n\n## Ovulation phase — peak nutrition\n\nFocus: antioxidants and liver support.\n\nYour liver processes used oestrogen. Antioxidant-rich foods (berries, pomegranate, colourful vegetables) protect cells during this high-activity phase. Zinc-rich foods (pumpkin seeds, chickpeas) support the LH surge that triggers ovulation.\n\n## Luteal phase — stabilise and soothe\n\nFocus: blood sugar stability, magnesium, B vitamins.\n\nProgesterone dominates and can cause cravings, mood swings, and bloating. Complex carbohydrates (oats, sweet potato, brown rice) stabilise blood sugar and reduce cravings. Magnesium (dark chocolate, nuts, seeds, leafy greens) eases PMS. B6 (bananas, chickpeas, sunflower seeds) supports serotonin production and may reduce mood-related PMS.\n\n**Avoid:** excess sugar, refined carbs, and alcohol — all amplify luteal phase symptoms."
+    },
+    {
+      "id": "exercise_01",
+      "title": "Syncing Your Workouts to Your Cycle",
+      "summary": "How oestrogen and progesterone affect your strength, endurance, and recovery — and how to train smarter.",
+      "topic": "exercise",
+      "phases": [],
+      "featured": true,
+      "minAge": 0,
+      "readingTimeMin": 4,
+      "content": "## Your fitness response is not constant across the month\n\nOestrogen and progesterone directly affect muscle strength, injury risk, and recovery speed. Training in sync with these hormonal shifts is called 'cycle syncing' — and a growing body of sports science supports it.\n\n## Menstrual phase — rest or gentle movement\n\nHormones are at their lowest and energy follows. This is not a phase to push for personal records. Gentle movement — restorative yoga, slow walking, stretching — improves blood flow and reduces cramping without taxing a body already under physical stress.\n\nIf you feel fine and pain-free, light cardio is entirely appropriate.\n\n## Follicular phase — build intensity\n\nRising oestrogen increases muscular strength and pain tolerance. This is the best phase for high-intensity training: strength work, HIIT, running, cycling. Research suggests muscle building is most efficient in the follicular phase due to oestrogen's anabolic (muscle-building) effect.\n\n**Injury note:** High oestrogen also increases joint laxity, particularly in the knee. Warm up thoroughly and focus on form.\n\n## Ovulation phase — peak performance\n\nOestrogen peaks at ovulation — so does your strength, coordination, and competitive drive. Schedule your hardest workouts or personal-best attempts here. Recovery is fast in this phase.\n\n## Luteal phase — wind down progressively\n\nProgesterone rises, body temperature is slightly elevated, and RPE (rate of perceived exertion) increases for the same effort. The first half of the luteal phase still supports moderate-intensity training; the second half benefits from lower intensity, longer rest periods, and more emphasis on mobility.\n\nListening to fatigue signals in the luteal phase is not a failure — it is physiologically intelligent."
+    },
+    {
+      "id": "exercise_02",
+      "title": "Rest and Movement During Your Period",
+      "summary": "When to push through and when to rest — and why both have their place.",
+      "topic": "exercise",
+      "phases": ["menstrual"],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 3,
+      "content": "## Movement during your period is generally beneficial\n\nUnless your cramps are severe or you have conditions like endometriosis, gentle to moderate exercise during your period is safe and often helpful. Endorphins released during movement are natural pain relievers and mood lifters.\n\n## What works well\n\n- **Yoga and stretching** — particularly hip-opening poses ease pelvic tension. Child's pose, pigeon, and supine twists are commonly recommended.\n- **Walking** — low impact, improves blood flow, releases endorphins.\n- **Swimming** — aquatic resistance is gentle on the body; menstrual cups or period-specific swimwear make this comfortable.\n- **Light strength training** — if energy allows, maintaining your routine is fine.\n\n## What to consider adjusting\n\n- **Very high-intensity training** — may worsen fatigue and cramps for some. Trial and error matters here.\n- **Heavy lifting** — progesterone and oestrogen are both low, which reduces ligament and muscle recovery efficiency. Not contraindicated, but less optimal.\n\n## Rest is not failure\n\nCulturally, many of us are taught to push through pain and fatigue at all times. Your period is one of the most energetically demanding phases of your cycle. Choosing rest is not weakness — it is appropriate physiological response.\n\nPay attention to your own signals. Some women feel energised enough to run during their period; others genuinely need two days of rest. Both are normal."
+    },
+    {
+      "id": "emotional_01",
+      "title": "Why Your Mood Changes Through the Month",
+      "summary": "The hormonal story behind mood swings, anxiety, and emotional sensitivity in your cycle.",
+      "topic": "emotional",
+      "phases": ["luteal"],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 4,
+      "content": "## Your mood is not 'just hormones' — but hormones matter\n\nEmotional changes across the cycle are real, measurable, and linked to specific hormonal shifts. Understanding the mechanism does not diminish the experience — it helps you contextualise it and respond with more self-compassion.\n\n## The oestrogen-serotonin connection\n\nOestrogen directly modulates serotonin (the 'feel-good' neurotransmitter) and dopamine. When oestrogen rises in the follicular phase, many women report better mood, more confidence, and easier social interaction. When it drops sharply before menstruation, serotonin drops with it — and so does mood.\n\n## Progesterone and the nervous system\n\nIn the luteal phase, progesterone is metabolised into a compound called allopregnanolone, which has a calming (GABA-like) effect. In some women, the brain becomes hypersensitive to progesterone changes rather than calmed by them — this is believed to be one mechanism behind PMDD (Premenstrual Dysphoric Disorder).\n\n## The cortisol overlap\n\nStress and your cycle interact. High cortisol (the stress hormone) can suppress progesterone and oestrogen, worsen PMS, and delay ovulation. Women with high baseline stress often report amplified mood symptoms in the luteal phase.\n\n## What helps\n\n- **Tracking your patterns** — even noting mood in Luna for 2–3 cycles reveals whether your emotional dips are cycle-timed (hormonal) or random (situational). That distinction is valuable.\n- **Magnesium** — a 250–300mg daily supplement in the second half of your luteal phase has good evidence for reducing anxiety and mood swings in PMS.\n- **Reducing alcohol and caffeine** — both amplify cortisol and disrupt sleep.\n- **Regular, gentle movement** — proven to increase serotonin and reduce PMS severity.\n\nIf mood changes are severe enough to significantly impair your work, relationships, or daily life, consider speaking to a doctor. PMDD is a real diagnosis with effective treatments."
+    },
+    {
+      "id": "emotional_02",
+      "title": "Managing PMS and PMDD",
+      "summary": "Understanding the difference, what the evidence says about relief, and when to get support.",
+      "topic": "emotional",
+      "phases": ["luteal"],
+      "featured": false,
+      "minAge": 13,
+      "readingTimeMin": 4,
+      "content": "## PMS vs PMDD — what is the difference?\n\n**Premenstrual syndrome (PMS)** affects up to 75% of women who menstruate. Symptoms — bloating, irritability, breast tenderness, fatigue — appear in the luteal phase and resolve within a few days of period onset. PMS is uncomfortable, but it does not typically prevent normal daily functioning.\n\n**Premenstrual dysphoric disorder (PMDD)** is a more severe condition affecting 3–8% of women. Symptoms are predominantly emotional: severe depression, intense anxiety or panic, rage, and hopelessness in the 1–2 weeks before the period. PMDD does interfere significantly with work, relationships, and daily life. It is a recognised condition in the DSM-5 and ICD-11.\n\n## Evidence-based approaches for PMS\n\n- **Lifestyle first**: regular aerobic exercise, limiting caffeine, alcohol, and salt, and prioritising sleep all have strong evidence.\n- **Magnesium**: 200–300mg daily in the luteal phase reduces bloating, mood swings, and breast tenderness in several trials.\n- **Calcium**: 1,200mg daily has been shown in large trials to reduce PMS symptom severity by ~50%.\n- **Vitamin B6**: helps with mood-related PMS; 50–100mg daily in the second half of the cycle.\n- **Agnus castus (chasteberry)**: herbal supplement with moderate evidence for reducing breast tenderness and mood symptoms.\n\n## For PMDD, see a doctor\n\nPMDD requires proper assessment and treatment. Options include SSRIs (which work even taken only in the luteal phase for PMDD — a unique property), combined oral contraceptives, and in severe cases, GnRH agonists. PMDD is not 'just bad PMS' and is not improved by lifestyle measures alone.\n\n## When to seek help in India\n\nIf your mood symptoms before your period feel unmanageable, please reach out to a gynaecologist or mental health professional. iCall (9152987821) provides free or low-cost counselling across India."
+    },
+    {
+      "id": "safety_01",
+      "title": "Your Body, Your Rights",
+      "summary": "Understanding bodily autonomy, consent, and your right to make decisions about your own health.",
+      "topic": "safety",
+      "phases": [],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 3,
+      "content": "## You have the right to your own body\n\nBodily autonomy means you have the right to make decisions about your own body — including what medical care you receive, what you share about your health, and who touches you.\n\nThis right belongs to you at every age. It does not depend on whether others approve of your choices.\n\n## Consent in healthcare\n\nWhen you visit a doctor, nurse, or any healthcare provider:\n\n- You can ask what any procedure involves before it happens.\n- You can say no to an examination or treatment.\n- A doctor should explain what they are doing and why.\n- If you are uncomfortable, you can ask for a female doctor or a chaperone.\n\nIn India, the Medical Council of India's code of ethics requires informed consent for all procedures.\n\n## If something feels wrong\n\nTrust your instincts. If a situation — with a healthcare provider, family member, or anyone else — feels wrong or makes you uncomfortable:\n\n- You are allowed to say no and leave.\n- You are allowed to tell a trusted adult.\n- What happened is never your fault.\n\n## Safe people to talk to\n\n- A trusted female relative or teacher\n- Your school or college counsellor\n- iCall: 9152987821 (free, confidential counselling, Monday to Saturday)\n- Childline: 1098 (24/7, for anyone under 18)\n- National Women Helpline: 181"
+    },
+    {
+      "id": "safety_02",
+      "title": "Getting Help in India",
+      "summary": "Helplines, support services, and mental health resources — free and available now.",
+      "topic": "safety",
+      "phases": [],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 2,
+      "content": "## You do not have to face this alone\n\nWhether you are dealing with mental health struggles, an unsafe relationship, a health concern you cannot discuss at home, or anything else — help is available and confidential.\n\n## Mental health support\n\n**iCall** — 9152987821\nFree, professional counselling. Run by TISS (Tata Institute of Social Sciences). Monday to Saturday, 8am–10pm. Also available on WhatsApp at the same number.\n\n**Vandrevala Foundation** — 1860-2662-345\nFree, 24-hour mental health helpline. Trained counsellors. English and Hindi.\n\n**NIMHANS** — 080-46110007\nNational Institute of Mental Health and Neurosciences, Bengaluru. Helpline for mental health queries.\n\n**iCall Online** — icallhelpline.org\nOnline counselling, chat support, and resources.\n\n## Women's safety\n\n**National Women Helpline** — 181\nFor issues of violence, harassment, or any distress. Available 24/7.\n\n**One Stop Centres** (also called Sakhi Centres)\nGovernment-run centres in most districts providing medical, legal, psychological, and shelter support to women affected by violence. Locate yours at: wcd.nic.in/osc.\n\n## For children and teenagers\n\n**Childline** — 1098\n24-hour helpline for anyone under 18 facing abuse, neglect, or distress. Free and confidential.\n\n**POCSO Act (Protection of Children from Sexual Offences)**\nThis law protects anyone under 18 from sexual abuse and assault. Reporting to the police is mandatory for those who know about such cases. Childline (1098) can help you navigate this.\n\n## Finding a gynaecologist\n\nFor period-related health concerns, government hospitals and community health centres (PHCs) offer free consultations. ASHA workers in your local area can help connect you with women's health services."
+    },
+    {
+      "id": "safety_03",
+      "title": "Understanding Consent",
+      "summary": "What consent means, why it matters, and how to recognise when it is not present.",
+      "topic": "safety",
+      "phases": [],
+      "featured": false,
+      "minAge": 13,
+      "readingTimeMin": 3,
+      "content": "## What consent means\n\nConsent is a freely given, specific, informed, and enthusiastic agreement to something. Consent applies to physical touch, sexual activity, sharing personal information, and medical decisions.\n\nConsent is **not**:\n- Staying silent (silence is not agreement)\n- Agreeing because you feel pressured or afraid\n- Something that carries over from before — each situation requires its own consent\n- Given once and valid forever\n\n## Consent can be withdrawn\n\nYou can change your mind at any time — even if you agreed before, even mid-situation. A person who respects you will stop immediately when you withdraw consent.\n\n## Recognising pressure\n\nPressure can look like:\n- Repeated asking after you have already said no\n- Making you feel guilty for saying no\n- Using affection or gifts to make you feel obligated\n- Threatening consequences\n- Taking advantage when you are tired, drunk, or distressed\n\nNone of these constitute real consent. If you have experienced pressure or coercion, it is not your fault.\n\n## The law in India\n\nThe age of consent in India is 18 years. The POCSO Act (Protection of Children from Sexual Offences Act, 2012) makes it illegal to engage in sexual activity with anyone under 18. This applies regardless of the relationship between the people involved.\n\n## If you need to talk to someone\n\n- Childline: 1098 (under 18, free, 24/7)\n- iCall: 9152987821 (free counselling, all ages)\n- A trusted adult — a teacher, school counsellor, or relative you trust"
+    },
+    {
+      "id": "basics_04",
+      "title": "Normal Discharge and What Changes Mean",
+      "summary": "Vaginal discharge is healthy and normal — here is what different types tell you about your cycle.",
+      "topic": "basics",
+      "phases": [],
+      "featured": false,
+      "minAge": 0,
+      "readingTimeMin": 3,
+      "content": "## Discharge is a sign of a healthy body\n\nVaginal discharge is normal, and its appearance changes predictably across your cycle. Understanding these changes is one of the most useful — and underappreciated — ways to understand your fertility and health.\n\n## How discharge changes across the cycle\n\n**Menstrual phase** — Period blood and tissue.\n\n**Early follicular phase** — Little to no discharge. May feel dry.\n\n**Mid follicular phase** — White or creamy discharge. Slightly sticky. Non-fertile.\n\n**Pre-ovulatory and ovulation** — Clear, slippery, and stretchy — like raw egg white. This is fertile-quality mucus. It nourishes and protects sperm. This is your most fertile time.\n\n**Luteal phase** — Discharge decreases. May become white or cloudy again. Drier overall.\n\n## When to pay attention\n\nSome changes in discharge can indicate infection:\n\n- **Cottage-cheese texture with itching** — possible yeast (candida) infection. Very common and easily treatable.\n- **Grey or greenish with a fishy smell** — possible bacterial vaginosis (BV). Also common and treatable with antibiotics.\n- **Yellow-green with unusual odour** — may indicate an STI. See a doctor.\n- **Unusual itching, burning, or swelling** — worth a doctor's visit regardless of discharge type.\n\nNormal discharge does not have a strong smell and does not cause significant itching or burning. If something feels off, trust that instinct and get it checked."
+    }
+  ]
+}

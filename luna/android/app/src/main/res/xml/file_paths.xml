@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- External storage download directory — used by UpdateService for APK downloads -->
+    <external-files-path
+        name="external_files"
+        path="." />
+</paths>

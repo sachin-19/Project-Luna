@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="luna_widget_name">Luna</string>
+    <string name="luna_widget_description">Shows your current cycle phase, day, and days until next period</string>
+</resources>

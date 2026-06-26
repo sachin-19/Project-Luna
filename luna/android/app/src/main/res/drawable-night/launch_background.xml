@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark-mode splash: matches the app's dark rose background (#200C17).
+     Android picks this file automatically when the device is in night mode,
+     replacing the white drawable/launch_background.xml. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#200C17" />
+        </shape>
+    </item>
+</layer-list>
