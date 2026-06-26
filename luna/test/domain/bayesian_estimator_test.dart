@@ -263,4 +263,93 @@ void main() {
       expect(ContraceptiveMethod.hormonalIud.usesBayesian, isTrue);
     });
   });
+
+  group('BayesianCycleEstimator — reproductive status priors', () {
+    test('postpartum prior starts at 35-day mean', () {
+      final est = BayesianCycleEstimator.postpartum();
+      expect(est.currentPrediction().expectedDays, 35);
+    });
+
+    test('postpartum prior has wider CI than default prior', () {
+      final dflt = BayesianCycleEstimator();
+      final post = BayesianCycleEstimator.postpartum();
+      final defaultWidth = dflt.currentPrediction().upperDays -
+          dflt.currentPrediction().lowerDays;
+      final postWidth = post.currentPrediction().upperDays -
+          post.currentPrediction().lowerDays;
+      expect(postWidth, greaterThan(defaultWidth));
+    });
+
+    test('breastfeeding prior starts at 45-day mean', () {
+      final est = BayesianCycleEstimator.breastfeeding();
+      expect(est.currentPrediction().expectedDays, 45);
+    });
+
+    test('breastfeeding prior has the widest CI (wider than postpartum)', () {
+      final post = BayesianCycleEstimator.postpartum();
+      final bf = BayesianCycleEstimator.breastfeeding();
+      final postWidth = post.currentPrediction().upperDays -
+          post.currentPrediction().lowerDays;
+      final bfWidth =
+          bf.currentPrediction().upperDays - bf.currentPrediction().lowerDays;
+      expect(bfWidth, greaterThanOrEqualTo(postWidth));
+    });
+
+    test('perimenopause prior starts at 40-day mean', () {
+      final est = BayesianCycleEstimator.perimenopause();
+      expect(est.currentPrediction().expectedDays, 40);
+    });
+
+    test('perimenopause prior has wider CI than default prior', () {
+      final dflt = BayesianCycleEstimator();
+      final peri = BayesianCycleEstimator.perimenopause();
+      final defaultWidth = dflt.currentPrediction().upperDays -
+          dflt.currentPrediction().lowerDays;
+      final periWidth = peri.currentPrediction().upperDays -
+          peri.currentPrediction().lowerDays;
+      expect(periWidth, greaterThan(defaultWidth));
+    });
+
+    test('new priors all start with 0 cycles observed', () {
+      expect(BayesianCycleEstimator.postpartum().cyclesObserved, 0);
+      expect(BayesianCycleEstimator.breastfeeding().cyclesObserved, 0);
+      expect(BayesianCycleEstimator.perimenopause().cyclesObserved, 0);
+    });
+
+    test('new priors update correctly on observe', () {
+      for (final est in [
+        BayesianCycleEstimator.postpartum(),
+        BayesianCycleEstimator.breastfeeding(),
+        BayesianCycleEstimator.perimenopause(),
+      ]) {
+        est.observe(28.0);
+        expect(est.cyclesObserved, 1);
+      }
+    });
+
+    test('new priors survive JSON round-trip', () {
+      for (final est in [
+        BayesianCycleEstimator.postpartum(),
+        BayesianCycleEstimator.breastfeeding(),
+        BayesianCycleEstimator.perimenopause(),
+      ]) {
+        est.observe(35.0);
+        final restored = BayesianCycleEstimator.fromJson(est.toJson());
+        expect(restored.cyclesObserved, est.cyclesObserved);
+        expect(restored.currentMean, closeTo(est.currentMean, 0.001));
+      }
+    });
+
+    test('all priors produce lowerDays ≥ 18 and upperDays ≤ 90', () {
+      for (final est in [
+        BayesianCycleEstimator.postpartum(),
+        BayesianCycleEstimator.breastfeeding(),
+        BayesianCycleEstimator.perimenopause(),
+      ]) {
+        final pred = est.currentPrediction();
+        expect(pred.lowerDays, greaterThanOrEqualTo(18));
+        expect(pred.upperDays, lessThanOrEqualTo(90));
+      }
+    });
+  });
 }

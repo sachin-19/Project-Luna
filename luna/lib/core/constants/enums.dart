@@ -239,6 +239,19 @@ extension ContraceptiveMethodLabel on ContraceptiveMethod {
   bool get usesBayesian => !isFixedInterval;
 }
 
+// ── Reproductive status ───────────────────────────────────────────────────────
+
+/// The user's current reproductive phase. Drives which Bayesian prior is used
+/// at onboarding. PCOS (tracked separately via hasPcos) takes precedence.
+enum ReproductiveStatus {
+  normal,
+  tryingToConceive,
+  pregnant,
+  postpartum,
+  breastfeeding,
+  perimenopause,
+}
+
 // ── Update system ─────────────────────────────────────────────────────────────
 
 enum UpdateStatus { idle, checking, available, downloading, readyToInstall, error }

@@ -1,3 +1,5 @@
+import '../../core/constants/enums.dart';
+
 class User {
   final int id;
   final String displayName;
@@ -20,6 +22,9 @@ class User {
   final bool notificationsDailyCheckin;
   final int notificationLeadDays;
   final bool onboarded;
+  final ReproductiveStatus reproductiveStatus;
+  final int? heightCm;
+  final double? weightKg;
   final int createdAt;
 
   const User({
@@ -44,6 +49,9 @@ class User {
     this.notificationsDailyCheckin = true,
     this.notificationLeadDays = 2,
     this.onboarded = false,
+    this.reproductiveStatus = ReproductiveStatus.normal,
+    this.heightCm,
+    this.weightKg,
     required this.createdAt,
   });
 
@@ -69,6 +77,9 @@ class User {
     bool? notificationsDailyCheckin,
     int? notificationLeadDays,
     bool? onboarded,
+    ReproductiveStatus? reproductiveStatus,
+    int? heightCm,
+    double? weightKg,
   }) =>
       User(
         id: id,
@@ -95,6 +106,9 @@ class User {
             notificationsDailyCheckin ?? this.notificationsDailyCheckin,
         notificationLeadDays: notificationLeadDays ?? this.notificationLeadDays,
         onboarded: onboarded ?? this.onboarded,
+        reproductiveStatus: reproductiveStatus ?? this.reproductiveStatus,
+        heightCm: heightCm ?? this.heightCm,
+        weightKg: weightKg ?? this.weightKg,
         createdAt: createdAt,
       );
 }

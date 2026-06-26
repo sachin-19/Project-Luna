@@ -16,4 +16,12 @@ abstract interface class CycleRepository {
   });
   Future<List<PeriodDay>> getPeriodDaysForCycle(int cycleId);
   Future<void> logPeriodDay(int cycleId, String date, String flow);
+
+  /// Updates [startDate] of the active cycle and removes any period_day_logs
+  /// that fall before the new start date (they are now outside the cycle window).
+  Future<void> updateActiveCycleStart(int cycleId, String newStartDate);
+
+  /// Updates [endDate] of a completed cycle, deletes any period_day_logs after
+  /// the new end date, and recalculates [periodLength] from remaining log rows.
+  Future<void> updateCompletedCycleEnd(int cycleId, String newEndDate);
 }

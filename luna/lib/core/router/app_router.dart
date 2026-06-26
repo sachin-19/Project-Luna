@@ -12,6 +12,8 @@ import '../../presentation/screens/onboarding/onboarding_identity_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_cycle_basics_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_history_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_regularity_screen.dart';
+import '../../presentation/screens/onboarding/onboarding_reproductive_screen.dart';
+import '../../presentation/screens/onboarding/onboarding_biometrics_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_reason_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_symptoms_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_lifestyle_screen.dart';
@@ -82,6 +84,14 @@ GoRouter buildRouter(Ref ref) {
       GoRoute(
         path: '/onboarding/regularity',
         builder: (context, state) => const OnboardingRegularityScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/reproductive',
+        builder: (context, state) => const OnboardingReproductiveScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/biometrics',
+        builder: (context, state) => const OnboardingBiometricsScreen(),
       ),
       GoRoute(
         path: '/onboarding/reason',

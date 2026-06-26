@@ -9,6 +9,7 @@ import '../../../data/services/export_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/cycle_provider.dart';
 import '../../providers/notification_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/update_provider.dart';
 import '../../providers/user_provider.dart';
@@ -65,6 +66,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final cs = theme.colorScheme;
     final user = ref.watch(userStreamProvider).valueOrNull;
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeModeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,6 +89,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     toggle: () =>
                         ref.read(themeModeProvider.notifier).set(mode),
                   ),
+                ),
+                _LanguagePicker(
+                  current: locale,
+                  onChanged: (l) =>
+                      ref.read(localeModeProvider.notifier).set(l),
                 ),
                 const _Divider(),
 
@@ -254,6 +261,57 @@ class _ThemePicker extends StatelessWidget {
             ],
             selected: {current},
             onSelectionChanged: (set) => onChanged(set.first),
+            style: SegmentedButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Language picker ────────────────────────────────────────────────────────────
+
+class _LanguagePicker extends StatelessWidget {
+  final Locale? current;
+  final ValueChanged<Locale?> onChanged;
+  const _LanguagePicker({required this.current, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Language', style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: 10),
+          SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(
+                value: 'system',
+                icon: Icon(Icons.phone_android_rounded),
+                label: Text('Auto'),
+              ),
+              ButtonSegment(
+                value: 'en',
+                label: Text('English'),
+              ),
+              ButtonSegment(
+                value: 'hi',
+                label: Text('हिंदी'),
+              ),
+            ],
+            selected: {
+              current == null
+                  ? 'system'
+                  : current!.languageCode,
+            },
+            onSelectionChanged: (set) {
+              final code = set.first;
+              onChanged(localeFromCode(code));
+            },
             style: SegmentedButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),

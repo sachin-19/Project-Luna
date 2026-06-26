@@ -5,6 +5,74 @@
 
 ---
 
+## ADR-028 · Expanded onboarding: reproductive status + biometrics screens
+**Date:** 2026-06-26
+**Status:** Accepted
+
+**Problem:** The original 8-screen onboarding collected cycle regularity and PCOS/endo status but nothing about postpartum, breastfeeding, perimenopause, or body composition. These are major confounders for cycle length prediction — a breastfeeding user's estimator should start at 45 days with high variance, not 28 days.
+
+**Decision:** Add two new skippable screens between Regularity (screen 4) and Reason (previously screen 5):
+
+1. **Screen 5 — Reproductive Status**: 6-option single-select (`normal`, `tryingToConceive`, `pregnant`, `postpartum`, `breastfeeding`, `perimenopause`). Stored in `users.reproductive_status`.
+
+2. **Screen 6 — Biometrics**: Optional height (cm) and weight (kg). Plausibility range-checked (height 100–250 cm, weight 20–300 kg). Stored in `users.height_cm` and `users.weight_kg`. A privacy note ("Stored only on your device. Never shared.") is shown inline.
+
+**Estimator prior branch logic** (applied in `SaveOnboarding` before any historical observations):
+
+| Condition | Prior |
+|---|---|
+| `hasPcos = true` | PCOS: mean=35, σ²=144 (always takes priority) |
+| `postpartum` | mean=35, σ²=225 (cycles slow to return) |
+| `breastfeeding` | mean=45, σ²=400 (prolactin suppresses ovulation) |
+| `perimenopause` | mean=40, σ²=225 (increasing variability) |
+| `pregnant` | Default (predictions irrelevant during pregnancy) |
+| `normal` / `tryingToConceive` + BMI < 18.5 | mean=30, σ²=49 (underweight irregularity) |
+| `normal` / `tryingToConceive` + BMI 25–30 | mean=30, σ²=20.25 (slight lengthening) |
+| `normal` / `tryingToConceive` + BMI ≥ 30 | mean=32, σ²=36 (obese, more irregular) |
+| `normal` / `tryingToConceive` + normal BMI | Default (mean=28, σ²=12.25) |
+
+**Data model additions:** `users` table: `reproductive_status TEXT DEFAULT 'normal'`, `height_cm INTEGER NULL`, `weight_kg REAL NULL`. `ReproductiveStatus` enum added to `core/constants/enums.dart`. `User` entity updated with 3 new fields. `OnboardingData` updated with 3 new fields and setters.
+
+**Trade-off:** More screens increase drop-off risk. Both new screens are skippable (secondary "Skip for now" action) so no one is forced to answer. The prediction benefit is significant — a breastfeeding user starting at mean=28 would show false-positive "late period" warnings within the first post-partum cycle.
+
+---
+
+## ADR-027 · Cycle date editing with time-bounded windows
+**Date:** 2026-06-26
+**Status:** Accepted
+
+**Problem:** Users who tapped "Period started" on the wrong date or tapped "Period ended today" too early had no way to correct the mistake. There was also no restriction preventing period flow logs from being saved on dates before the current cycle started, which would silently corrupt `periodLength`.
+
+**Decision:**
+
+1. **Active cycle start date editing**: Allow correcting `startDate` while the cycle is still open (no `endDate`). The new date must be ≤ today, ≤ 30 days back, and > the previous completed cycle's `endDate`. Any `period_day_logs` before the new start date are deleted. The Bayesian estimator is NOT touched — it only updates when a cycle closes via `StartNewCycle`.
+
+2. **Completed cycle end date editing**: Allow correcting `endDate` of the **most recently completed** cycle within 7 days of it being set. The new date must be ≤ today, ≥ `cycleStart`, and < the next cycle's `startDate`. `period_day_logs` after the new end date are deleted; `periodLength` is recalculated from remaining rows. Only the most recent cycle is editable — editing older cycles would corrupt the Bayesian posterior (it's append-only).
+
+3. **Period log window restriction**: `period_day_logs` may only be saved for dates within `[cycle.startDate, today]`. If a user opens the log sheet for a date before the current cycle's start, the Period tab shows an informational message instead of the flow selector.
+
+**UI entry points:**
+- "Wrong start date? Edit" — small `TextButton` in the Period tab when `isToday` and cycle is active.
+- "Period still going? Correct end date" — small `TextButton` in the no-active-cycle view when `isToday` and the last completed cycle is within the 7-day edit window.
+
+**Trade-off:** More permissive apps (Flo, Clue) allow editing any historical cycle date. Luna restricts this because the Bayesian estimator is an on-device append-only posterior — retroactive edits to `cycleLength` (start→next start) would leave the estimator in an inconsistent state relative to the database with no way to retrain.
+
+---
+
+## ADR-026 · Onboarding history seeding with period_day_logs and estimator observations
+**Date:** 2026-06-26
+**Status:** Accepted
+
+**Problem:** The original `save_onboarding.dart` stored past period start dates in `cycle_entries` but never created `period_day_logs` for historical periods and never fed the Bayesian estimator with those cycle lengths. As a result, first predictions were always the cold population prior (28 days) regardless of how much history the user entered.
+
+**Decision:** Rewrote `save_onboarding.dart` to:
+1. Create `period_day_logs` (flow = 'medium') for every day of every historical period.
+2. For completed cycles: call `estimator.observe(cycleLength)` in chronological order after inserting the cycle row.
+3. Added per-period duration input (Slider, 2–10 days) to the onboarding history screen so actual period lengths are stored rather than a flat default.
+4. Added `insertSeededCycle()` to `CycleRepository` for inserting completed historical cycles with all fields set.
+
+---
+
 ## ADR-025 · "Period ended today" button in log sheet period tab
 **Date:** 2026-06-26
 **Status:** Accepted

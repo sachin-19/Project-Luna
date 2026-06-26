@@ -44,13 +44,15 @@
 - [x] Screen 2 — Cycle Basics
 - [x] Screen 3 — Cycle History (skippable)
 - [x] Screen 4 — Regularity (skippable)
-- [x] Screen 5 — Reason (skippable)
-- [x] Screen 6 — Common Symptoms (skippable)
-- [x] Screen 7 — Lifestyle (skippable)
-- [x] Screen 8 — Notifications (saves to DB + redirects to /home)
-- [x] `OnboardingScaffold` — shared progress bar + layout
+- [x] Screen 5 — Reproductive Status (skippable) ← NEW
+- [x] Screen 6 — Biometrics: Height + Weight (skippable) ← NEW
+- [x] Screen 7 — Reason (skippable)
+- [x] Screen 8 — Common Symptoms (skippable)
+- [x] Screen 9 — Lifestyle (skippable)
+- [x] Screen 10 — Notifications (saves to DB + redirects to /home)
+- [x] `OnboardingScaffold` — shared progress bar + layout (totalSteps updated to 10)
 - [x] GoRouter gate: redirect to onboarding if `!user.onboarded`
-- [x] Data written to DB atomically on Screen 8 completion
+- [x] Data written to DB atomically on Screen 10 completion
 
 ### Home Screen (Week 4–5)
 - [x] `CycleWheel` — `CustomPainter` with four phase arcs + today needle
@@ -78,6 +80,9 @@
 - [x] Free-text note field (shared across tabs)
 - [x] "Save" writes all three logs in a single DB transaction
 - [x] Period tab: "Period ended today" button — explicitly closes active cycle with accurate `periodLength`
+- [x] Period tab: window restriction — flow logs blocked for dates before `cycle.startDate`
+- [x] Period tab: "Wrong start date? Edit" — corrects active cycle `startDate`, deletes orphaned logs (ADR-027)
+- [x] No-period view: "Period still going? Correct end date" — 7-day edit window for last completed cycle (ADR-027)
 
 ### Phase Theming Integration (Week 6)
 - [x] `AnimatedTheme` wrapping entire app in `app.dart`
@@ -111,7 +116,7 @@
 - [x] Hindi strings complete in `app_hi.arb` (37 keys added, wired across all screens)
 - [x] Light mode fully tested (theme switcher rewrite verified on device)
 - [x] All screens work without a logged cycle (empty states verified)
-- [x] Unit tests: `cycle_calculator_test.dart` (27 tests) + `bayesian_estimator_test.dart` (13 tests)
+- [x] Unit tests: `cycle_calculator_test.dart` (27 tests) + `bayesian_estimator_test.dart` (24 tests, including new reproductive priors)
 - [x] Widget test: onboarding flow end-to-end (15 tests in `onboarding_test.dart`)
 - [x] APK build tested on a physical Android device (release build, 63.1 MB)
 

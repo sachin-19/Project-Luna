@@ -45,7 +45,7 @@ class _OnboardingReasonScreenState
     final cs = theme.colorScheme;
 
     return OnboardingScaffold(
-      stepIndex: 4,
+      stepIndex: 6,
       title: 'Why are you here?',
       subtitle: 'Helps Luna show the most relevant features first.',
       body: Wrap(

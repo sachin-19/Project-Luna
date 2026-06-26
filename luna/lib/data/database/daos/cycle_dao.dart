@@ -66,4 +66,25 @@ class CycleDao extends DatabaseAccessor<AppDatabase> with _$CycleDaoMixin {
           target: [periodDayLogsTable.cycleEntryId, periodDayLogsTable.date],
         ),
       );
+
+  Future<void> updateCycleStart(int id, String newStartDate) =>
+      (update(cycleEntriesTable)..where((t) => t.id.equals(id))).write(
+        CycleEntriesTableCompanion(startDate: Value(newStartDate)),
+      );
+
+  /// Deletes period_day_logs for [cycleId] with date strictly before [date].
+  Future<int> deletePeriodDaysBefore(int cycleId, String date) =>
+      (delete(periodDayLogsTable)
+            ..where((t) =>
+                t.cycleEntryId.equals(cycleId) &
+                t.date.isSmallerThanValue(date)))
+          .go();
+
+  /// Deletes period_day_logs for [cycleId] with date strictly after [date].
+  Future<int> deletePeriodDaysAfter(int cycleId, String date) =>
+      (delete(periodDayLogsTable)
+            ..where((t) =>
+                t.cycleEntryId.equals(cycleId) &
+                t.date.isBiggerThanValue(date)))
+          .go();
 }

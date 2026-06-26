@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/enums.dart';
 import '../../core/extensions/enums_l10n.dart';
 import '../../core/extensions/l10n.dart';
+import '../../domain/usecases/edit_cycle_end_date.dart';
+import '../../domain/usecases/edit_cycle_start_date.dart';
 import '../../domain/usecases/start_new_cycle.dart';
 import '../providers/cycle_provider.dart';
 import '../providers/log_provider.dart';
@@ -235,50 +237,48 @@ class _PeriodTab extends ConsumerWidget {
     final cs = theme.colorScheme;
     final state = ref.watch(logNotifierProvider(date));
     final notifier = ref.read(logNotifierProvider(date).notifier);
-    final hasActiveCycle = ref.watch(activeCycleProvider).valueOrNull != null;
+    final activeCycle = ref.watch(activeCycleProvider).valueOrNull;
 
-    if (!hasActiveCycle) {
+    // ── No active cycle ───────────────────────────────────────────────────────
+    if (activeCycle == null) {
+      return _NoPeriodView(
+        isToday: isToday,
+        date: date,
+        scrollController: scrollController,
+      );
+    }
+
+    // ── Date is before cycle start → log not permitted ────────────────────────
+    final cycleStart = activeCycle.startDateTime;
+    if (date.isBefore(cycleStart)) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.water_drop_outlined, size: 48, color: cs.primary),
+              Icon(Icons.calendar_today_outlined,
+                  size: 48, color: cs.onSurfaceVariant),
               const SizedBox(height: 16),
               Text(
-                context.l10n.noPeriodInProgress,
+                context.l10n.periodDateBeforeCycleStart,
                 style: theme.textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                isToday
-                    ? context.l10n.noPeriodStartBelow
-                    : context.l10n.noPeriodStartFromHome,
+                context.l10n.periodDateBeforeCycleStartHint,
                 style: theme.textTheme.bodySmall
                     ?.copyWith(color: cs.onSurfaceVariant),
                 textAlign: TextAlign.center,
               ),
-              if (isToday) ...[
-                const SizedBox(height: 24),
-                FilledButton.icon(
-                  onPressed: () async {
-                    final today = DateTime.now();
-                    await ref.read(startNewCycleProvider).execute(
-                          DateTime(today.year, today.month, today.day),
-                        );
-                  },
-                  icon: const Icon(Icons.water_drop_rounded, size: 18),
-                  label: Text(context.l10n.periodStartedToday),
-                ),
-              ],
             ],
           ),
         ),
       );
     }
 
+    // ── Date is within cycle window → show flow selector ──────────────────────
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
@@ -333,9 +333,222 @@ class _PeriodTab extends ConsumerWidget {
         if (isToday) ...[
           const SizedBox(height: 20),
           _EndPeriodButton(date: date),
+          const SizedBox(height: 8),
+          _EditStartDateButton(activeCycleId: activeCycle.id),
         ],
       ],
     );
+  }
+}
+
+// ── No-period view (extracted for clarity) ────────────────────────────────────
+
+class _NoPeriodView extends ConsumerWidget {
+  final bool isToday;
+  final DateTime date;
+  final ScrollController scrollController;
+
+  const _NoPeriodView({
+    required this.isToday,
+    required this.date,
+    required this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    // Check if the last completed cycle is within the edit window.
+    final lastCycleAsync = isToday
+        ? ref.watch(lastCompletedCycleProvider)
+        : const AsyncData(null);
+    final lastCycle = lastCycleAsync.valueOrNull;
+
+    final bool canEditEndDate = () {
+      if (lastCycle?.endDate == null) return false;
+      final originalEnd = DateTime.parse(lastCycle!.endDate!);
+      final windowClose = originalEnd
+          .add(const Duration(days: EditCycleEndDate.editWindowDays));
+      final today = DateTime.now();
+      final todayNorm = DateTime(today.year, today.month, today.day);
+      return !todayNorm.isAfter(windowClose);
+    }();
+
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(32),
+      children: [
+        const SizedBox(height: 32),
+        Icon(Icons.water_drop_outlined, size: 48, color: cs.primary),
+        const SizedBox(height: 16),
+        Text(
+          context.l10n.noPeriodInProgress,
+          style: theme.textTheme.titleMedium,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          isToday
+              ? context.l10n.noPeriodStartBelow
+              : context.l10n.noPeriodStartFromHome,
+          style:
+              theme.textTheme.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+          textAlign: TextAlign.center,
+        ),
+        if (isToday) ...[
+          const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: () async {
+              final now = DateTime.now();
+              await ref.read(startNewCycleProvider).execute(
+                    DateTime(now.year, now.month, now.day),
+                  );
+            },
+            icon: const Icon(Icons.water_drop_rounded, size: 18),
+            label: Text(context.l10n.periodStartedToday),
+          ),
+          if (canEditEndDate && lastCycle != null) ...[
+            const SizedBox(height: 12),
+            _EditEndDateButton(cycleId: lastCycle.id),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+// ── Edit start date button ────────────────────────────────────────────────────
+
+class _EditStartDateButton extends ConsumerWidget {
+  final int activeCycleId;
+  const _EditStartDateButton({required this.activeCycleId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cs = Theme.of(context).colorScheme;
+    return Center(
+      child: TextButton.icon(
+        onPressed: () => _pickAndApply(context, ref),
+        icon: Icon(Icons.edit_calendar_outlined,
+            size: 15, color: cs.onSurfaceVariant),
+        label: Text(
+          context.l10n.editStartDate,
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall
+              ?.copyWith(color: cs.onSurfaceVariant),
+        ),
+        style: TextButton.styleFrom(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickAndApply(BuildContext context, WidgetRef ref) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final earliest = today.subtract(
+      const Duration(days: EditCycleStartDate.maxDaysBack),
+    );
+
+    final picked = await showDatePicker(
+      context: context,
+      helpText: context.l10n.editStartDateTitle,
+      initialDate: today,
+      firstDate: earliest,
+      lastDate: today,
+    );
+    if (picked == null || !context.mounted) return;
+
+    final result = await ref
+        .read(editCycleStartDateProvider)
+        .execute(activeCycleId, picked);
+
+    if (!context.mounted) return;
+    if (result is EditStartSuccess) {
+      ref.invalidate(activeCycleProvider);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.editStartDateSuccess)),
+      );
+    } else if (result is EditStartFailure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.editDateError(result.reason)),
+        ),
+      );
+    }
+  }
+}
+
+// ── Edit end date button ──────────────────────────────────────────────────────
+
+class _EditEndDateButton extends ConsumerWidget {
+  final int cycleId;
+  const _EditEndDateButton({required this.cycleId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cs = Theme.of(context).colorScheme;
+    return Center(
+      child: TextButton.icon(
+        onPressed: () => _pickAndApply(context, ref),
+        icon: Icon(Icons.edit_calendar_outlined,
+            size: 15, color: cs.onSurfaceVariant),
+        label: Text(
+          context.l10n.editEndDate,
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall
+              ?.copyWith(color: cs.onSurfaceVariant),
+        ),
+        style: TextButton.styleFrom(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickAndApply(BuildContext context, WidgetRef ref) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    final picked = await showDatePicker(
+      context: context,
+      helpText: context.l10n.editEndDateTitle,
+      initialDate: today,
+      firstDate: today.subtract(const Duration(days: 30)),
+      lastDate: today,
+    );
+    if (picked == null || !context.mounted) return;
+
+    final result = await ref
+        .read(editCycleEndDateProvider)
+        .execute(cycleId, picked);
+
+    if (!context.mounted) return;
+    if (result is EditEndSuccess) {
+      ref.invalidate(lastCompletedCycleProvider);
+      ref.invalidate(activeCycleProvider);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.editEndDateSuccess)),
+      );
+    } else if (result is EditEndFailure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.editDateError(result.reason)),
+        ),
+      );
+    }
   }
 }
 

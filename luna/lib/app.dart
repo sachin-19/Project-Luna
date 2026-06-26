@@ -4,6 +4,7 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_switcher.dart';
 import 'l10n/app_localizations.dart';
+import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/providers/cycle_provider.dart';
 
@@ -14,6 +15,7 @@ class LunaApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeModeProvider);
     final phase = ref.watch(currentPhaseProvider);
 
     final router = ref.watch(routerProvider);
@@ -29,6 +31,7 @@ class LunaApp extends ConsumerWidget {
       theme: buildTheme(phase, Brightness.light),
       darkTheme: buildTheme(phase, Brightness.dark),
       themeMode: themeMode,
+      locale: locale,
       // RepaintBoundary lets theme_switcher capture the current frame
       // before a theme change so the circular reveal overlay can show it.
       // AnimatedTheme is removed — the reveal animation handles the visual.

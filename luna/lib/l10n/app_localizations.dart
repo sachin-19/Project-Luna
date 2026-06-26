@@ -691,6 +691,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Period marked as ended'**
   String get periodEndedSuccess;
+
+  /// No description provided for @periodDateBeforeCycleStart.
+  ///
+  /// In en, this message translates to:
+  /// **'This date is before your current period started'**
+  String get periodDateBeforeCycleStart;
+
+  /// No description provided for @periodDateBeforeCycleStartHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only log flow for dates within your current period.'**
+  String get periodDateBeforeCycleStartHint;
+
+  /// No description provided for @editStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong start date? Edit'**
+  String get editStartDate;
+
+  /// No description provided for @editStartDateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct period start date'**
+  String get editStartDateTitle;
+
+  /// No description provided for @editStartDateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date updated'**
+  String get editStartDateSuccess;
+
+  /// No description provided for @editEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Period still going? Correct end date'**
+  String get editEndDate;
+
+  /// No description provided for @editEndDateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct period end date'**
+  String get editEndDateTitle;
+
+  /// No description provided for @editEndDateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'End date updated'**
+  String get editEndDateSuccess;
+
+  /// No description provided for @editDateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update date. {reason}'**
+  String editDateError(String reason);
 }
 
 class _AppLocalizationsDelegate

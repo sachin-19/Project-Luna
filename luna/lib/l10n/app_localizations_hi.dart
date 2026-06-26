@@ -329,4 +329,33 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get periodEndedSuccess => 'पीरियड समाप्त के रूप में दर्ज किया गया';
+
+  @override
+  String get periodDateBeforeCycleStart =>
+      'यह तारीख आपके मौजूदा पीरियड शुरू होने से पहले की है';
+
+  @override
+  String get periodDateBeforeCycleStartHint =>
+      'आप केवल अपने मौजूदा पीरियड की तारीखों में फ्लो दर्ज कर सकती हैं।';
+
+  @override
+  String get editStartDate => 'शुरुआती तारीख गलत? सुधारें';
+
+  @override
+  String get editStartDateTitle => 'पीरियड शुरू होने की तारीख सुधारें';
+
+  @override
+  String get editStartDateSuccess => 'शुरुआती तारीख अपडेट हो गई';
+
+  @override
+  String get editEndDate => 'पीरियड अभी भी जारी है? अंतिम तारीख सुधारें';
+
+  @override
+  String get editEndDateTitle => 'पीरियड समाप्त होने की तारीख सुधारें';
+
+  @override
+  String get editEndDateSuccess => 'अंतिम तारीख अपडेट हो गई';
+
+  @override
+  String editDateError(String reason) => 'तारीख अपडेट नहीं हो सकी। $reason';
 }

@@ -334,4 +334,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get periodEndedSuccess => 'Period marked as ended';
+
+  @override
+  String get periodDateBeforeCycleStart =>
+      'This date is before your current period started';
+
+  @override
+  String get periodDateBeforeCycleStartHint =>
+      'You can only log flow for dates within your current period.';
+
+  @override
+  String get editStartDate => 'Wrong start date? Edit';
+
+  @override
+  String get editStartDateTitle => 'Correct period start date';
+
+  @override
+  String get editStartDateSuccess => 'Start date updated';
+
+  @override
+  String get editEndDate => 'Period still going? Correct end date';
+
+  @override
+  String get editEndDateTitle => 'Correct period end date';
+
+  @override
+  String get editEndDateSuccess => 'End date updated';
+
+  @override
+  String editDateError(String reason) => 'Could not update date. $reason';
 }

@@ -97,6 +97,45 @@ class CycleEstimatorService {
     await _saveAll();
   }
 
+  /// Initialise to postpartum prior — cycles slow to return after birth.
+  Future<void> initPostpartum() async {
+    _estimator = BayesianCycleEstimator.postpartum();
+    await _saveAll();
+  }
+
+  /// Initialise to breastfeeding prior — prolactin suppresses ovulation.
+  Future<void> initBreastfeeding() async {
+    _estimator = BayesianCycleEstimator.breastfeeding();
+    await _saveAll();
+  }
+
+  /// Initialise to perimenopause prior — increasing cycle variability.
+  Future<void> initPerimenopause() async {
+    _estimator = BayesianCycleEstimator.perimenopause();
+    await _saveAll();
+  }
+
+  /// Adjust the default prior based on BMI when no clinical condition applies.
+  /// Only adjusts the prior if BMI is outside the normal range (18.5–25).
+  Future<void> applyBmiPrior(int heightCm, double weightKg) async {
+    if (heightCm <= 0 || weightKg <= 0) return;
+    final heightM = heightCm / 100.0;
+    final bmi = weightKg / (heightM * heightM);
+
+    if (bmi < 18.5) {
+      // Underweight: cycles may be irregular or suppressed.
+      _estimator = BayesianCycleEstimator(priorMean: 30.0, priorVariance: 49.0);
+    } else if (bmi >= 25 && bmi < 30) {
+      // Overweight: slight tendency toward longer cycles.
+      _estimator = BayesianCycleEstimator(priorMean: 30.0, priorVariance: 20.25);
+    } else if (bmi >= 30) {
+      // Obese: more irregular cycles, higher variance.
+      _estimator = BayesianCycleEstimator(priorMean: 32.0, priorVariance: 36.0);
+    }
+    // Normal BMI (18.5–25): keep the default prior unchanged.
+    await _saveAll();
+  }
+
   /// Reset to population prior. Pass [pcos] = true to use the PCOS prior.
   Future<void> reset({bool pcos = false}) async {
     _estimator = pcos ? BayesianCycleEstimator.pcos() : BayesianCycleEstimator();

@@ -86,6 +86,19 @@ class CycleRepositoryImpl implements CycleRepository {
       ),
     );
   }
+
+  @override
+  Future<void> updateActiveCycleStart(int cycleId, String newStartDate) async {
+    await _dao.updateCycleStart(cycleId, newStartDate);
+    await _dao.deletePeriodDaysBefore(cycleId, newStartDate);
+  }
+
+  @override
+  Future<void> updateCompletedCycleEnd(int cycleId, String newEndDate) async {
+    await _dao.deletePeriodDaysAfter(cycleId, newEndDate);
+    final remaining = await _dao.getPeriodDaysForCycle(cycleId);
+    await _dao.updateCycleEnd(cycleId, newEndDate, remaining.length);
+  }
 }
 
 extension _CycleRowMapper on CycleEntryRow {

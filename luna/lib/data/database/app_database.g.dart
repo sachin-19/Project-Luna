@@ -196,7 +196,7 @@ class $UsersTableTable extends UsersTable
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    defaultValue: const Constant('dark'),
+    defaultValue: const Constant('light'),
   );
   static const VerificationMeta _cloudSyncEnabledMeta = const VerificationMeta(
     'cloudSyncEnabled',
@@ -283,6 +283,40 @@ class $UsersTableTable extends UsersTable
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _reproductiveStatusMeta =
+      const VerificationMeta('reproductiveStatus');
+  @override
+  late final GeneratedColumn<String> reproductiveStatus =
+      GeneratedColumn<String>(
+        'reproductive_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('normal'),
+      );
+  static const VerificationMeta _heightCmMeta = const VerificationMeta(
+    'heightCm',
+  );
+  @override
+  late final GeneratedColumn<int> heightCm = GeneratedColumn<int>(
+    'height_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _weightKgMeta = const VerificationMeta(
+    'weightKg',
+  );
+  @override
+  late final GeneratedColumn<double> weightKg = GeneratedColumn<double>(
+    'weight_kg',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -317,6 +351,9 @@ class $UsersTableTable extends UsersTable
     notificationsDailyCheckin,
     notificationLeadDays,
     onboarded,
+    reproductiveStatus,
+    heightCm,
+    weightKg,
     createdAt,
   ];
   @override
@@ -506,6 +543,27 @@ class $UsersTableTable extends UsersTable
         onboarded.isAcceptableOrUnknown(data['onboarded']!, _onboardedMeta),
       );
     }
+    if (data.containsKey('reproductive_status')) {
+      context.handle(
+        _reproductiveStatusMeta,
+        reproductiveStatus.isAcceptableOrUnknown(
+          data['reproductive_status']!,
+          _reproductiveStatusMeta,
+        ),
+      );
+    }
+    if (data.containsKey('height_cm')) {
+      context.handle(
+        _heightCmMeta,
+        heightCm.isAcceptableOrUnknown(data['height_cm']!, _heightCmMeta),
+      );
+    }
+    if (data.containsKey('weight_kg')) {
+      context.handle(
+        _weightKgMeta,
+        weightKg.isAcceptableOrUnknown(data['weight_kg']!, _weightKgMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -607,6 +665,18 @@ class $UsersTableTable extends UsersTable
         DriftSqlType.bool,
         data['${effectivePrefix}onboarded'],
       )!,
+      reproductiveStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reproductive_status'],
+      )!,
+      heightCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}height_cm'],
+      ),
+      weightKg: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight_kg'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}created_at'],
@@ -642,6 +712,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
   final bool notificationsDailyCheckin;
   final int notificationLeadDays;
   final bool onboarded;
+  final String reproductiveStatus;
+  final int? heightCm;
+  final double? weightKg;
   final int createdAt;
   const UserRow({
     required this.id,
@@ -665,6 +738,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
     required this.notificationsDailyCheckin,
     required this.notificationLeadDays,
     required this.onboarded,
+    required this.reproductiveStatus,
+    this.heightCm,
+    this.weightKg,
     required this.createdAt,
   });
   @override
@@ -701,6 +777,13 @@ class UserRow extends DataClass implements Insertable<UserRow> {
     );
     map['notification_lead_days'] = Variable<int>(notificationLeadDays);
     map['onboarded'] = Variable<bool>(onboarded);
+    map['reproductive_status'] = Variable<String>(reproductiveStatus);
+    if (!nullToAbsent || heightCm != null) {
+      map['height_cm'] = Variable<int>(heightCm);
+    }
+    if (!nullToAbsent || weightKg != null) {
+      map['weight_kg'] = Variable<double>(weightKg);
+    }
     map['created_at'] = Variable<int>(createdAt);
     return map;
   }
@@ -736,6 +819,13 @@ class UserRow extends DataClass implements Insertable<UserRow> {
       notificationsDailyCheckin: Value(notificationsDailyCheckin),
       notificationLeadDays: Value(notificationLeadDays),
       onboarded: Value(onboarded),
+      reproductiveStatus: Value(reproductiveStatus),
+      heightCm: heightCm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(heightCm),
+      weightKg: weightKg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weightKg),
       createdAt: Value(createdAt),
     );
   }
@@ -779,6 +869,11 @@ class UserRow extends DataClass implements Insertable<UserRow> {
         json['notificationLeadDays'],
       ),
       onboarded: serializer.fromJson<bool>(json['onboarded']),
+      reproductiveStatus: serializer.fromJson<String>(
+        json['reproductiveStatus'],
+      ),
+      heightCm: serializer.fromJson<int?>(json['heightCm']),
+      weightKg: serializer.fromJson<double?>(json['weightKg']),
       createdAt: serializer.fromJson<int>(json['createdAt']),
     );
   }
@@ -811,6 +906,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
       ),
       'notificationLeadDays': serializer.toJson<int>(notificationLeadDays),
       'onboarded': serializer.toJson<bool>(onboarded),
+      'reproductiveStatus': serializer.toJson<String>(reproductiveStatus),
+      'heightCm': serializer.toJson<int?>(heightCm),
+      'weightKg': serializer.toJson<double?>(weightKg),
       'createdAt': serializer.toJson<int>(createdAt),
     };
   }
@@ -837,6 +935,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
     bool? notificationsDailyCheckin,
     int? notificationLeadDays,
     bool? onboarded,
+    String? reproductiveStatus,
+    Value<int?> heightCm = const Value.absent(),
+    Value<double?> weightKg = const Value.absent(),
     int? createdAt,
   }) => UserRow(
     id: id ?? this.id,
@@ -871,6 +972,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
         notificationsDailyCheckin ?? this.notificationsDailyCheckin,
     notificationLeadDays: notificationLeadDays ?? this.notificationLeadDays,
     onboarded: onboarded ?? this.onboarded,
+    reproductiveStatus: reproductiveStatus ?? this.reproductiveStatus,
+    heightCm: heightCm.present ? heightCm.value : this.heightCm,
+    weightKg: weightKg.present ? weightKg.value : this.weightKg,
     createdAt: createdAt ?? this.createdAt,
   );
   UserRow copyWithCompanion(UsersTableCompanion data) {
@@ -928,6 +1032,11 @@ class UserRow extends DataClass implements Insertable<UserRow> {
           ? data.notificationLeadDays.value
           : this.notificationLeadDays,
       onboarded: data.onboarded.present ? data.onboarded.value : this.onboarded,
+      reproductiveStatus: data.reproductiveStatus.present
+          ? data.reproductiveStatus.value
+          : this.reproductiveStatus,
+      heightCm: data.heightCm.present ? data.heightCm.value : this.heightCm,
+      weightKg: data.weightKg.present ? data.weightKg.value : this.weightKg,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -956,6 +1065,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
           ..write('notificationsDailyCheckin: $notificationsDailyCheckin, ')
           ..write('notificationLeadDays: $notificationLeadDays, ')
           ..write('onboarded: $onboarded, ')
+          ..write('reproductiveStatus: $reproductiveStatus, ')
+          ..write('heightCm: $heightCm, ')
+          ..write('weightKg: $weightKg, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -984,6 +1096,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
     notificationsDailyCheckin,
     notificationLeadDays,
     onboarded,
+    reproductiveStatus,
+    heightCm,
+    weightKg,
     createdAt,
   ]);
   @override
@@ -1011,6 +1126,9 @@ class UserRow extends DataClass implements Insertable<UserRow> {
           other.notificationsDailyCheckin == this.notificationsDailyCheckin &&
           other.notificationLeadDays == this.notificationLeadDays &&
           other.onboarded == this.onboarded &&
+          other.reproductiveStatus == this.reproductiveStatus &&
+          other.heightCm == this.heightCm &&
+          other.weightKg == this.weightKg &&
           other.createdAt == this.createdAt);
 }
 
@@ -1036,6 +1154,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
   final Value<bool> notificationsDailyCheckin;
   final Value<int> notificationLeadDays;
   final Value<bool> onboarded;
+  final Value<String> reproductiveStatus;
+  final Value<int?> heightCm;
+  final Value<double?> weightKg;
   final Value<int> createdAt;
   const UsersTableCompanion({
     this.id = const Value.absent(),
@@ -1059,6 +1180,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
     this.notificationsDailyCheckin = const Value.absent(),
     this.notificationLeadDays = const Value.absent(),
     this.onboarded = const Value.absent(),
+    this.reproductiveStatus = const Value.absent(),
+    this.heightCm = const Value.absent(),
+    this.weightKg = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   UsersTableCompanion.insert({
@@ -1083,6 +1207,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
     this.notificationsDailyCheckin = const Value.absent(),
     this.notificationLeadDays = const Value.absent(),
     this.onboarded = const Value.absent(),
+    this.reproductiveStatus = const Value.absent(),
+    this.heightCm = const Value.absent(),
+    this.weightKg = const Value.absent(),
     required int createdAt,
   }) : displayName = Value(displayName),
        birthYear = Value(birthYear),
@@ -1109,6 +1236,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
     Expression<bool>? notificationsDailyCheckin,
     Expression<int>? notificationLeadDays,
     Expression<bool>? onboarded,
+    Expression<String>? reproductiveStatus,
+    Expression<int>? heightCm,
+    Expression<double>? weightKg,
     Expression<int>? createdAt,
   }) {
     return RawValuesInsertable({
@@ -1138,6 +1268,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
       if (notificationLeadDays != null)
         'notification_lead_days': notificationLeadDays,
       if (onboarded != null) 'onboarded': onboarded,
+      if (reproductiveStatus != null) 'reproductive_status': reproductiveStatus,
+      if (heightCm != null) 'height_cm': heightCm,
+      if (weightKg != null) 'weight_kg': weightKg,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -1164,6 +1297,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
     Value<bool>? notificationsDailyCheckin,
     Value<int>? notificationLeadDays,
     Value<bool>? onboarded,
+    Value<String>? reproductiveStatus,
+    Value<int?>? heightCm,
+    Value<double?>? weightKg,
     Value<int>? createdAt,
   }) {
     return UsersTableCompanion(
@@ -1191,6 +1327,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
           notificationsDailyCheckin ?? this.notificationsDailyCheckin,
       notificationLeadDays: notificationLeadDays ?? this.notificationLeadDays,
       onboarded: onboarded ?? this.onboarded,
+      reproductiveStatus: reproductiveStatus ?? this.reproductiveStatus,
+      heightCm: heightCm ?? this.heightCm,
+      weightKg: weightKg ?? this.weightKg,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -1267,6 +1406,15 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
     if (onboarded.present) {
       map['onboarded'] = Variable<bool>(onboarded.value);
     }
+    if (reproductiveStatus.present) {
+      map['reproductive_status'] = Variable<String>(reproductiveStatus.value);
+    }
+    if (heightCm.present) {
+      map['height_cm'] = Variable<int>(heightCm.value);
+    }
+    if (weightKg.present) {
+      map['weight_kg'] = Variable<double>(weightKg.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<int>(createdAt.value);
     }
@@ -1297,6 +1445,9 @@ class UsersTableCompanion extends UpdateCompanion<UserRow> {
           ..write('notificationsDailyCheckin: $notificationsDailyCheckin, ')
           ..write('notificationLeadDays: $notificationLeadDays, ')
           ..write('onboarded: $onboarded, ')
+          ..write('reproductiveStatus: $reproductiveStatus, ')
+          ..write('heightCm: $heightCm, ')
+          ..write('weightKg: $weightKg, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -3751,6 +3902,9 @@ typedef $$UsersTableTableCreateCompanionBuilder =
       Value<bool> notificationsDailyCheckin,
       Value<int> notificationLeadDays,
       Value<bool> onboarded,
+      Value<String> reproductiveStatus,
+      Value<int?> heightCm,
+      Value<double?> weightKg,
       required int createdAt,
     });
 typedef $$UsersTableTableUpdateCompanionBuilder =
@@ -3776,6 +3930,9 @@ typedef $$UsersTableTableUpdateCompanionBuilder =
       Value<bool> notificationsDailyCheckin,
       Value<int> notificationLeadDays,
       Value<bool> onboarded,
+      Value<String> reproductiveStatus,
+      Value<int?> heightCm,
+      Value<double?> weightKg,
       Value<int> createdAt,
     });
 
@@ -3890,6 +4047,21 @@ class $$UsersTableTableFilterComposer
 
   ColumnFilters<bool> get onboarded => $composableBuilder(
     column: $table.onboarded,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reproductiveStatus => $composableBuilder(
+    column: $table.reproductiveStatus,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get heightCm => $composableBuilder(
+    column: $table.heightCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get weightKg => $composableBuilder(
+    column: $table.weightKg,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4013,6 +4185,21 @@ class $$UsersTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get reproductiveStatus => $composableBuilder(
+    column: $table.reproductiveStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get heightCm => $composableBuilder(
+    column: $table.heightCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get weightKg => $composableBuilder(
+    column: $table.weightKg,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -4123,6 +4310,17 @@ class $$UsersTableTableAnnotationComposer
   GeneratedColumn<bool> get onboarded =>
       $composableBuilder(column: $table.onboarded, builder: (column) => column);
 
+  GeneratedColumn<String> get reproductiveStatus => $composableBuilder(
+    column: $table.reproductiveStatus,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get heightCm =>
+      $composableBuilder(column: $table.heightCm, builder: (column) => column);
+
+  GeneratedColumn<double> get weightKg =>
+      $composableBuilder(column: $table.weightKg, builder: (column) => column);
+
   GeneratedColumn<int> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
@@ -4176,6 +4374,9 @@ class $$UsersTableTableTableManager
                 Value<bool> notificationsDailyCheckin = const Value.absent(),
                 Value<int> notificationLeadDays = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
+                Value<String> reproductiveStatus = const Value.absent(),
+                Value<int?> heightCm = const Value.absent(),
+                Value<double?> weightKg = const Value.absent(),
                 Value<int> createdAt = const Value.absent(),
               }) => UsersTableCompanion(
                 id: id,
@@ -4199,6 +4400,9 @@ class $$UsersTableTableTableManager
                 notificationsDailyCheckin: notificationsDailyCheckin,
                 notificationLeadDays: notificationLeadDays,
                 onboarded: onboarded,
+                reproductiveStatus: reproductiveStatus,
+                heightCm: heightCm,
+                weightKg: weightKg,
                 createdAt: createdAt,
               ),
           createCompanionCallback:
@@ -4224,6 +4428,9 @@ class $$UsersTableTableTableManager
                 Value<bool> notificationsDailyCheckin = const Value.absent(),
                 Value<int> notificationLeadDays = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
+                Value<String> reproductiveStatus = const Value.absent(),
+                Value<int?> heightCm = const Value.absent(),
+                Value<double?> weightKg = const Value.absent(),
                 required int createdAt,
               }) => UsersTableCompanion.insert(
                 id: id,
@@ -4247,6 +4454,9 @@ class $$UsersTableTableTableManager
                 notificationsDailyCheckin: notificationsDailyCheckin,
                 notificationLeadDays: notificationLeadDays,
                 onboarded: onboarded,
+                reproductiveStatus: reproductiveStatus,
+                heightCm: heightCm,
+                weightKg: weightKg,
                 createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0

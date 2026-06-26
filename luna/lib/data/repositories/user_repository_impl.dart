@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:drift/drift.dart';
+import '../../core/constants/enums.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../database/app_database.dart';
@@ -62,6 +63,12 @@ extension _UserRowMapper on UserRow {
         notificationsDailyCheckin: notificationsDailyCheckin,
         notificationLeadDays: notificationLeadDays,
         onboarded: onboarded,
+        reproductiveStatus: ReproductiveStatus.values.firstWhere(
+          (e) => e.name == reproductiveStatus,
+          orElse: () => ReproductiveStatus.normal,
+        ),
+        heightCm: heightCm,
+        weightKg: weightKg,
         createdAt: createdAt,
       );
 }
@@ -93,6 +100,9 @@ extension _UserMapper on User {
         notificationsDailyCheckin: Value(notificationsDailyCheckin),
         notificationLeadDays: Value(notificationLeadDays),
         onboarded: Value(onboarded),
+        reproductiveStatus: Value(reproductiveStatus.name),
+        heightCm: Value(heightCm),
+        weightKg: Value(weightKg),
         createdAt: Value(createdAt),
       );
 }

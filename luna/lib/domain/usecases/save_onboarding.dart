@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/enums.dart';
 import '../../data/providers.dart';
 import '../../domain/entities/user.dart';
 import '../../presentation/onboarding/onboarding_notifier.dart';
@@ -45,13 +46,36 @@ class SaveOnboarding {
       notificationsOvulation: data.notifOvulation,
       notificationsDailyCheckin: data.notifCheckin,
       onboarded: true,
+      reproductiveStatus: data.reproductiveStatus,
+      heightCm: data.heightCm,
+      weightKg: data.weightKg,
       createdAt: now.millisecondsSinceEpoch,
     ));
 
     // ── 2. Initialise estimator prior before any observations ────────────────
-    // PCOS prior must be set first so historical observations update the right
-    // posterior (wide variance, 35-day mean).
-    if (data.hasPcos) await estimator.initPcos();
+    // Priority: PCOS > postpartum > breastfeeding > perimenopause > BMI > default.
+    // PCOS is a permanent condition and always takes precedence.
+    if (data.hasPcos) {
+      await estimator.initPcos();
+    } else {
+      switch (data.reproductiveStatus) {
+        case ReproductiveStatus.postpartum:
+          await estimator.initPostpartum();
+        case ReproductiveStatus.breastfeeding:
+          await estimator.initBreastfeeding();
+        case ReproductiveStatus.perimenopause:
+          await estimator.initPerimenopause();
+        case ReproductiveStatus.pregnant:
+          // Predictions are irrelevant during pregnancy; keep default prior.
+          break;
+        case ReproductiveStatus.normal:
+        case ReproductiveStatus.tryingToConceive:
+          // Apply BMI-adjusted prior if height + weight were provided.
+          if (data.heightCm != null && data.weightKg != null) {
+            await estimator.applyBmiPrior(data.heightCm!, data.weightKg!);
+          }
+      }
+    }
 
     // ── 3. Build sorted list of all period entries (oldest first) ────────────
     final entries = <_Entry>[];

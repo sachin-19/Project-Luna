@@ -26,5 +26,9 @@ class UsersTable extends Table {
   BoolColumn get notificationsDailyCheckin => boolean().withDefault(const Constant(true))();
   IntColumn get notificationLeadDays => integer().withDefault(const Constant(2))();
   BoolColumn get onboarded => boolean().withDefault(const Constant(false))();
+  TextColumn get reproductiveStatus =>
+      text().withDefault(const Constant('normal'))();
+  IntColumn get heightCm => integer().nullable()();
+  RealColumn get weightKg => real().nullable()();
   IntColumn get createdAt => integer()();
 }

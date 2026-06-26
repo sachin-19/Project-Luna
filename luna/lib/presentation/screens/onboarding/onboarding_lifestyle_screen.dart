@@ -59,7 +59,7 @@ class _OnboardingLifestyleScreenState
     final cs = theme.colorScheme;
 
     return OnboardingScaffold(
-      stepIndex: 6,
+      stepIndex: 8,
       title: 'Lifestyle context',
       subtitle: 'Lifestyle factors affect your cycle. Helps Luna find patterns.',
       body: Column(

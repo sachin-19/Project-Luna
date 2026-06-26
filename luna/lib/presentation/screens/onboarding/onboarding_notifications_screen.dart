@@ -80,7 +80,7 @@ class _OnboardingNotificationsScreenState
     final cs = theme.colorScheme;
 
     return OnboardingScaffold(
-      stepIndex: 7,
+      stepIndex: 9,
       title: 'Stay in the loop',
       subtitle: 'Luna works best when it can remind you at the right times.',
       body: Column(

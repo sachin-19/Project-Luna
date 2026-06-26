@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/enums.dart';
 
-/// Holds all in-progress onboarding answers across the 8 screens.
-/// Written to the DB only when Screen 8 completes.
+/// Holds all in-progress onboarding answers across the 10 screens.
+/// Written to the DB only when Screen 10 completes.
 class OnboardingData {
   final String name;
   final int birthYear;
@@ -19,6 +20,9 @@ class OnboardingData {
   final int? baselineStress;
   final String? exerciseFrequency;
   final bool onHormonalContraception;
+  final ReproductiveStatus reproductiveStatus;
+  final int? heightCm;
+  final double? weightKg;
   final bool notifPeriod;
   final bool notifOvulation;
   final bool notifCheckin;
@@ -40,6 +44,9 @@ class OnboardingData {
     this.baselineStress,
     this.exerciseFrequency,
     this.onHormonalContraception = false,
+    this.reproductiveStatus = ReproductiveStatus.normal,
+    this.heightCm,
+    this.weightKg,
     this.notifPeriod = true,
     this.notifOvulation = true,
     this.notifCheckin = true,
@@ -62,6 +69,9 @@ class OnboardingData {
     int? baselineStress,
     String? exerciseFrequency,
     bool? onHormonalContraception,
+    ReproductiveStatus? reproductiveStatus,
+    int? heightCm,
+    double? weightKg,
     bool? notifPeriod,
     bool? notifOvulation,
     bool? notifCheckin,
@@ -84,6 +94,9 @@ class OnboardingData {
         exerciseFrequency: exerciseFrequency ?? this.exerciseFrequency,
         onHormonalContraception:
             onHormonalContraception ?? this.onHormonalContraception,
+        reproductiveStatus: reproductiveStatus ?? this.reproductiveStatus,
+        heightCm: heightCm ?? this.heightCm,
+        weightKg: weightKg ?? this.weightKg,
         notifPeriod: notifPeriod ?? this.notifPeriod,
         notifOvulation: notifOvulation ?? this.notifOvulation,
         notifCheckin: notifCheckin ?? this.notifCheckin,
@@ -117,6 +130,10 @@ class OnboardingNotifier extends StateNotifier<OnboardingData> {
       state = state.copyWith(exerciseFrequency: v);
   void setOnHormonalContraception(bool v) =>
       state = state.copyWith(onHormonalContraception: v);
+  void setReproductiveStatus(ReproductiveStatus v) =>
+      state = state.copyWith(reproductiveStatus: v);
+  void setHeightCm(int? v) => state = state.copyWith(heightCm: v);
+  void setWeightKg(double? v) => state = state.copyWith(weightKg: v);
   void setNotifPeriod(bool v) => state = state.copyWith(notifPeriod: v);
   void setNotifOvulation(bool v) => state = state.copyWith(notifOvulation: v);
   void setNotifCheckin(bool v) => state = state.copyWith(notifCheckin: v);

@@ -5,6 +5,14 @@ import '../../core/constants/enums.dart';
 import '../../core/utils/cycle_calculator.dart';
 import 'user_provider.dart';
 
+/// The most recently completed cycle (endDate IS NOT NULL), or null if none.
+/// Auto-disposed; invalidate after editing a completed cycle's end date to
+/// force a fresh load.
+final lastCompletedCycleProvider = FutureProvider.autoDispose<CycleEntry?>((ref) async {
+  final cycles = await ref.read(cycleRepositoryProvider).getLastNCycles(1);
+  return cycles.isNotEmpty ? cycles.first : null;
+});
+
 final activeCycleProvider = StreamProvider<CycleEntry?>((ref) {
   return ref.watch(cycleRepositoryProvider).watchActiveCycle();
 });

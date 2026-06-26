@@ -51,7 +51,7 @@ class _OnboardingRegularityScreenState
     notifier.setRegularity(_regularity);
     notifier.setHasPcos(_condition == 'pcos' || _condition == 'both');
     notifier.setHasEndo(_condition == 'endo' || _condition == 'both');
-    context.push('/onboarding/reason');
+    context.push('/onboarding/reproductive');
   }
 
   @override

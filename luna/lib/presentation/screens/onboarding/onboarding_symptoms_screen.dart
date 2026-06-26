@@ -56,7 +56,7 @@ class _OnboardingSymptomsScreenState
     final cs = theme.colorScheme;
 
     return OnboardingScaffold(
-      stepIndex: 5,
+      stepIndex: 7,
       title: 'Common symptoms',
       subtitle:
           'Pre-selects your log chips — makes logging take under 5 seconds.',

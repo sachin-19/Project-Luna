@@ -164,6 +164,18 @@ class BayesianCycleEstimator {
   factory BayesianCycleEstimator.pcos() =>
       BayesianCycleEstimator(priorMean: 35.0, priorVariance: 144.0);
 
+  // Postpartum — cycles take longer to return; higher variance.
+  factory BayesianCycleEstimator.postpartum() =>
+      BayesianCycleEstimator(priorMean: 35.0, priorVariance: 225.0); // 15²
+
+  // Breastfeeding — prolactin suppresses ovulation; very long/absent cycles.
+  factory BayesianCycleEstimator.breastfeeding() =>
+      BayesianCycleEstimator(priorMean: 45.0, priorVariance: 400.0); // 20²
+
+  // Perimenopause — cycle length increasingly variable.
+  factory BayesianCycleEstimator.perimenopause() =>
+      BayesianCycleEstimator(priorMean: 40.0, priorVariance: 225.0); // 15²
+
   /// Call once per completed cycle with the observed length in days.
   /// Returns the updated [CyclePrediction].
   CyclePrediction observe(double observedCycleLength) {
