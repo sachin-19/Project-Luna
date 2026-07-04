@@ -37,10 +37,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       checkAndShowUpdateSheet(context, ref);
+      _requestNotificationPermissionIfNeeded();
       _scheduleNotifications();
       _syncIfAuthenticated();
       _updateWidget();
     });
+  }
+
+  /// Requests the OS notification permission once on first home screen load.
+  /// No-op if permission was already granted or if the user has all
+  /// notification types disabled. Called before [_scheduleNotifications] so
+  /// login users (who bypass onboarding) also get the system prompt.
+  Future<void> _requestNotificationPermissionIfNeeded() async {
+    final user = ref.read(userStreamProvider).valueOrNull;
+    if (user == null) return;
+    if (!user.notificationsPeriod &&
+        !user.notificationsOvulation &&
+        !user.notificationsDailyCheckin) return;
+    await ref.read(notificationServiceProvider).requestPermission();
   }
 
   @override
@@ -118,8 +132,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ? CycleCalculator.currentCycleDay(cycle.startDateTime) ?? 0
         : 0;
     final cycleLength = user?.avgCycleDays ?? 28;
+    final avgPeriodDays = user?.avgPeriodDays ?? 5;
     final greeting = _greeting(user?.displayName);
     final hasActiveCycle = cycle != null;
+    final isPeriodActive = hasActiveCycle && phase == CyclePhase.menstrual;
 
     return Scaffold(
       body: CustomScrollView(
@@ -216,16 +232,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
                   // ── Prediction + insight (active cycle only) ─────────────
                   if (hasActiveCycle) ...[
-                    // Show period-expected / late card when the predicted start
-                    // date has arrived but no new period has been logged yet.
-                    if (daysFromPredicted >= 0) ...[
+                    // Period-expected card only makes sense outside the menstrual
+                    // phase — during an active period, daysFromPredicted can't
+                    // logically be ≥ 0 anyway, but guard it explicitly.
+                    if (!isPeriodActive && daysFromPredicted >= 0) ...[
                       _PeriodExpectedCard(daysLate: daysFromPredicted),
                       const SizedBox(height: 16),
                     ],
-                    PredictionCard(
-                      prediction: prediction,
-                      lastPeriodStart: cycle.startDateTime,
-                    ),
+                    // During an active period → show day count + estimated end.
+                    // All other phases → show next-period prediction.
+                    if (isPeriodActive)
+                      _PeriodInProgressCard(
+                        periodDay: cycleDay,
+                        cycleStart: cycle.startDateTime,
+                        avgPeriodDays: avgPeriodDays,
+                      )
+                    else
+                      PredictionCard(
+                        prediction: prediction,
+                        lastPeriodStart: cycle.startDateTime,
+                      ),
                     const SizedBox(height: 24),
                     _PhaseInsightCard(phase: phase),
                     const SizedBox(height: 16),
@@ -443,6 +469,117 @@ class _InsightPreview extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+// ── Period in progress card ────────────────────────────────────────────────────
+
+class _PeriodInProgressCard extends StatelessWidget {
+  final int periodDay;
+  final DateTime cycleStart;
+  final int avgPeriodDays;
+
+  const _PeriodInProgressCard({
+    required this.periodDay,
+    required this.cycleStart,
+    required this.avgPeriodDays,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    const rose = Color(0xFFE53E6A);
+
+    final estimatedEnd = DateTime(
+      cycleStart.year,
+      cycleStart.month,
+      cycleStart.day,
+    ).add(Duration(days: avgPeriodDays - 1));
+
+    final today = DateTime.now();
+    final todayOnly = DateTime(today.year, today.month, today.day);
+    final daysLeft = estimatedEnd.difference(todayOnly).inDays;
+
+    final String endLabel;
+    if (daysLeft <= 0) {
+      endLabel = 'Ending around today';
+    } else if (daysLeft == 1) {
+      endLabel = 'Expected to end tomorrow';
+    } else {
+      endLabel = 'Expected to end in $daysLeft days';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        color: rose.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: rose.withValues(alpha: 0.25)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Period in progress',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: rose.withValues(alpha: 0.9),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Day $periodDay',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(Icons.schedule_rounded,
+                        size: 12, color: cs.onSurfaceVariant),
+                    const SizedBox(width: 4),
+                    Text(
+                      endLabel,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () => showLogBottomSheet(context, initialTab: 0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: rose.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.water_drop_rounded, color: rose, size: 16),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Log flow',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: rose,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

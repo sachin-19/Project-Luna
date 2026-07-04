@@ -35,13 +35,30 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // Future migrations numbered here as schema evolves.
+          // v1 → v2: added reproductive_status, height_cm, weight_kg to users.
+          // Uses PRAGMA to check first — a fresh install on the new schema
+          // already has these columns at v1, so we must not try to add them again.
+          if (from < 2) {
+            final rows =
+                await customSelect('PRAGMA table_info("users")').get();
+            final existing =
+                rows.map((r) => r.read<String>('name')).toSet();
+            if (!existing.contains('reproductive_status')) {
+              await m.addColumn(usersTable, usersTable.reproductiveStatus);
+            }
+            if (!existing.contains('height_cm')) {
+              await m.addColumn(usersTable, usersTable.heightCm);
+            }
+            if (!existing.contains('weight_kg')) {
+              await m.addColumn(usersTable, usersTable.weightKg);
+            }
+          }
         },
       );
 }

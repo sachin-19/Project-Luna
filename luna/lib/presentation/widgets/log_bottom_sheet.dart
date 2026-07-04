@@ -278,6 +278,22 @@ class _PeriodTab extends ConsumerWidget {
       );
     }
 
+    // ── Period ended (explicitly or beyond day 10) → treat same as no period ──
+    // The cycle row stays open (endDate null) after "period ended" so phase
+    // calculations keep working, but the Period tab should reflect that the
+    // flow has stopped and offer "Period started today" for a new cycle.
+    final cycleDay = date.difference(activeCycle.startDateTime).inDays + 1;
+    final periodOver =
+        activeCycle.periodLength != null || cycleDay > 10;
+
+    if (periodOver) {
+      return _NoPeriodView(
+        isToday: isToday,
+        date: date,
+        scrollController: scrollController,
+      );
+    }
+
     // ── Date is within cycle window → show flow selector ──────────────────────
     return ListView(
       controller: scrollController,

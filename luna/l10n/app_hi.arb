@@ -158,5 +158,23 @@
   "periodEndConfirmTitle": "पीरियड समाप्त करें?",
   "periodEndConfirmBody": "आज को आपका आखिरी दिन माना जाएगा। आपका डेटा सेव हो जाएगा।",
   "periodEndConfirm": "पीरियड समाप्त करें",
-  "periodEndedSuccess": "पीरियड समाप्त के रूप में दर्ज किया गया"
+  "periodEndedSuccess": "पीरियड समाप्त के रूप में दर्ज किया गया",
+
+  "periodDateBeforeCycleStart": "तारीख वर्तमान चक्र शुरू होने से पहले की है",
+  "periodDateBeforeCycleStartHint": "आप केवल अपने चक्र के शुरू होने के बाद की तारीखें लॉग कर सकती हैं।",
+
+  "editStartDate": "गलत शुरुआत की तारीख? संपादित करें",
+  "editStartDateTitle": "चक्र शुरू होने की तारीख संपादित करें",
+  "editStartDateSuccess": "चक्र शुरू होने की तारीख अपडेट हो गई",
+
+  "editEndDate": "पीरियड अभी भी जारी है? अंत की तारीख सुधारें",
+  "editEndDateTitle": "पीरियड खत्म होने की तारीख संपादित करें",
+  "editEndDateSuccess": "पीरियड खत्म होने की तारीख अपडेट हो गई",
+
+  "editDateError": "अपडेट नहीं हो सका: {reason}",
+  "@editDateError": {
+    "placeholders": {
+      "reason": { "type": "String" }
+    }
+  }
 }

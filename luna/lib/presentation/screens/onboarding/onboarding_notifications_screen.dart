@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../onboarding/onboarding_notifier.dart';
-import '../../providers/cycle_provider.dart';
-import '../../providers/notification_provider.dart';
-import '../../providers/user_provider.dart';
 import '../../../domain/usecases/save_onboarding.dart';
 import 'widgets/onboarding_scaffold.dart';
 
@@ -45,29 +42,21 @@ class _OnboardingNotificationsScreenState
       final data = ref.read(onboardingProvider);
       await ref.read(saveOnboardingProvider).execute(data);
 
-      // Request OS notification permission if any notifications are enabled.
-      final notifService = ref.read(notificationServiceProvider);
-      if (_period || _ovulation || _checkin) {
-        await notifService.requestPermission();
-      }
-
-      // Schedule notifications based on the saved preferences.
-      // The user stream and cycle stream may not have emitted yet, so we
-      // schedule from the home screen initState as a fallback — but doing it
-      // here immediately covers the first-launch case.
-      final user = ref.read(userStreamProvider).valueOrNull;
-      final cycle = ref.read(activeCycleProvider).valueOrNull;
-      if (user != null) {
-        await notifService.scheduleAll(user, cycle);
-      }
+      // Do NOT call requestPermission() here — saving with onboarded:true causes
+      // GoRouter to redirect to /home immediately, which also calls
+      // requestPermission() via HomeScreen.initState(). Calling it twice
+      // simultaneously throws PlatformException(permissionRequestInProgress).
+      // HomeScreen handles permission for both new users and returning users.
 
       if (mounted) context.go('/home');
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('SaveOnboarding error: $e\n$st');
       if (mounted) {
         setState(() => _saving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not save your data. Please try again.'),
+          SnackBar(
+            content: Text('Could not save your data: $e'),
+            duration: const Duration(seconds: 10),
           ),
         );
       }

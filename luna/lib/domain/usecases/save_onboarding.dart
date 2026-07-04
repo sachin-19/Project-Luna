@@ -122,10 +122,7 @@ class SaveOnboarding {
 
       final endDateRaw = e.start.add(Duration(days: e.duration - 1));
       // Cap the end date at today — we can't log future days.
-      final effectiveEnd =
-          endDateRaw.isAfter(today) ? today : endDateRaw;
-      // Still active if this is the last entry and the period hasn't finished yet.
-      final isActive = isLast && endDateRaw.isAfter(today);
+      final effectiveEnd = endDateRaw.isAfter(today) ? today : endDateRaw;
 
       // Cycle length = gap to the next cycle's start (null for the last entry
       // since we don't yet know when the next period will begin).
@@ -134,14 +131,19 @@ class SaveOnboarding {
           : null;
 
       // Insert cycle_entries row.
+      // The most-recent entry is always left open (endDate = null) so that
+      // _phaseForDate covers the full cycle — follicular/ovulation/luteal days
+      // are beyond the menstrual period and must not be cut off.
+      // For older entries the endDate is the day before the next cycle starts,
+      // matching the exclusive-end convention used by start_new_cycle.dart.
       final int cycleId;
-      if (isActive) {
-        // Open cycle — no endDate yet.
-        cycleId = await cycleRepo.startCycle(_iso(e.start), isSeeded: false);
+      if (isLast) {
+        cycleId = await cycleRepo.startCycle(_iso(e.start), isSeeded: e.isSeeded);
       } else {
+        final nextStart = entries[i + 1].start;
         cycleId = await cycleRepo.insertSeededCycle(
           startDate: _iso(e.start),
-          endDate: _iso(effectiveEnd),
+          endDate: _iso(nextStart.subtract(const Duration(days: 1))),
           periodLength: e.duration,
           cycleLength: cycleLen,
         );

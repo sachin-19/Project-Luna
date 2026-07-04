@@ -235,7 +235,7 @@ class SyncService {
         baselineStress: m['baselineStress'] as int?,
         exerciseFrequency: m['exerciseFrequency'] as String?,
         preferredLanguage: m['preferredLanguage'] as String? ?? 'en',
-        themeBrightness: m['themeBrightness'] as String? ?? 'dark',
+        themeBrightness: m['themeBrightness'] as String? ?? 'light',
         notificationsPeriod: m['notificationsPeriod'] as bool? ?? true,
         notificationsOvulation: m['notificationsOvulation'] as bool? ?? true,
         notificationsDailyCheckin:

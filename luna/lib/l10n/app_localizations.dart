@@ -695,13 +695,13 @@ abstract class AppLocalizations {
   /// No description provided for @periodDateBeforeCycleStart.
   ///
   /// In en, this message translates to:
-  /// **'This date is before your current period started'**
+  /// **'Date before current cycle start'**
   String get periodDateBeforeCycleStart;
 
   /// No description provided for @periodDateBeforeCycleStartHint.
   ///
   /// In en, this message translates to:
-  /// **'You can only log flow for dates within your current period.'**
+  /// **'You can only log flow days after your cycle started.'**
   String get periodDateBeforeCycleStartHint;
 
   /// No description provided for @editStartDate.
@@ -713,13 +713,13 @@ abstract class AppLocalizations {
   /// No description provided for @editStartDateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Correct period start date'**
+  /// **'Edit cycle start date'**
   String get editStartDateTitle;
 
   /// No description provided for @editStartDateSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Start date updated'**
+  /// **'Cycle start date updated'**
   String get editStartDateSuccess;
 
   /// No description provided for @editEndDate.
@@ -731,19 +731,19 @@ abstract class AppLocalizations {
   /// No description provided for @editEndDateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Correct period end date'**
+  /// **'Edit period end date'**
   String get editEndDateTitle;
 
   /// No description provided for @editEndDateSuccess.
   ///
   /// In en, this message translates to:
-  /// **'End date updated'**
+  /// **'Period end date updated'**
   String get editEndDateSuccess;
 
   /// No description provided for @editDateError.
   ///
   /// In en, this message translates to:
-  /// **'Could not update date. {reason}'**
+  /// **'Could not update: {reason}'**
   String editDateError(String reason);
 }
 

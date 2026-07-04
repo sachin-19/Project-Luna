@@ -42,7 +42,7 @@ class User {
     this.baselineStress,
     this.exerciseFrequency,
     this.preferredLanguage = 'en',
-    this.themeBrightness = 'dark',
+    this.themeBrightness = 'light',
     this.cloudSyncEnabled = false,
     this.notificationsPeriod = true,
     this.notificationsOvulation = true,

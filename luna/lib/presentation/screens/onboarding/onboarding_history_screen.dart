@@ -4,98 +4,18 @@ import 'package:go_router/go_router.dart';
 import '../../onboarding/onboarding_notifier.dart';
 import 'widgets/onboarding_scaffold.dart';
 
-class OnboardingHistoryScreen extends ConsumerStatefulWidget {
+class OnboardingHistoryScreen extends ConsumerWidget {
   const OnboardingHistoryScreen({super.key});
 
   @override
-  ConsumerState<OnboardingHistoryScreen> createState() =>
-      _OnboardingHistoryScreenState();
-}
-
-class _OnboardingHistoryScreenState
-    extends ConsumerState<OnboardingHistoryScreen> {
-  late List<DateTime> _dates;
-  late List<int> _durations;
-
-  int get _defaultDuration =>
-      ref.read(onboardingProvider).periodDays;
-
-  @override
-  void initState() {
-    super.initState();
-    final data = ref.read(onboardingProvider);
-    _dates = List.from(data.pastPeriods);
-    _durations = data.pastPeriodDurations.isNotEmpty
-        ? List.from(data.pastPeriodDurations)
-        : List.filled(_dates.length, data.periodDays);
-  }
-
-  Future<void> _addDate() async {
-    if (_dates.length >= 5) return;
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 30)),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().subtract(const Duration(days: 7)),
-      helpText: 'Past period start date',
-    );
-    if (picked != null) {
-      setState(() {
-        _dates.add(picked);
-        _durations.add(_defaultDuration);
-        // Sort descending (newest first) keeping durations in sync.
-        final paired = List.generate(
-          _dates.length,
-          (i) => (date: _dates[i], dur: _durations[i]),
-        )..sort((a, b) => b.date.compareTo(a.date));
-        _dates = paired.map((e) => e.date).toList();
-        _durations = paired.map((e) => e.dur).toList();
-      });
-    }
-  }
-
-  void _removeAt(int index) {
-    setState(() {
-      _dates.removeAt(index);
-      _durations.removeAt(index);
-    });
-  }
-
-  void _setDuration(int index, int days) {
-    setState(() => _durations[index] = days);
-  }
-
-  Future<void> _editDuration(int index) async {
-    int current = _durations[index];
-    final result = await showDialog<int>(
-      context: context,
-      builder: (ctx) => _DurationDialog(
-        date: _dates[index],
-        initialDays: current,
-      ),
-    );
-    if (result != null) _setDuration(index, result);
-  }
-
-  String _accuracyLabel() {
-    if (_dates.isEmpty) return '±5–7 days';
-    if (_dates.length == 1) return '±4 days';
-    if (_dates.length == 2) return '±3 days';
-    if (_dates.length == 3) return '±2 days';
-    return '±1–2 days';
-  }
-
-  void _onContinue() {
-    final notifier = ref.read(onboardingProvider.notifier);
-    notifier.setPastPeriods(_dates);
-    notifier.setPastPeriodDurations(_durations);
-    context.push('/onboarding/regularity');
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final data = ref.watch(onboardingProvider);
+    final dates = data.pastPeriods;
+    final durations = data.pastPeriodDurations.isNotEmpty
+        ? data.pastPeriodDurations
+        : List.filled(dates.length, data.periodDays);
 
     return OnboardingScaffold(
       stepIndex: 2,
@@ -105,7 +25,6 @@ class _OnboardingHistoryScreenState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Accuracy indicator
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -118,16 +37,14 @@ class _OnboardingHistoryScreenState
                     color: cs.onPrimaryContainer, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  'Prediction window: ${_accuracyLabel()}',
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: cs.onPrimaryContainer,
-                  ),
+                  'Prediction window: ${_accuracyLabel(dates.length)}',
+                  style: theme.textTheme.labelMedium
+                      ?.copyWith(color: cs.onPrimaryContainer),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 16),
-          // Info about duration
           Text(
             'Tap the duration badge on each entry to adjust how long that period lasted.',
             style: theme.textTheme.bodySmall
@@ -135,28 +52,29 @@ class _OnboardingHistoryScreenState
           ),
           const SizedBox(height: 16),
 
-          ..._dates.asMap().entries.map(
+          ...dates.asMap().entries.map(
                 (e) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: _DateChip(
                     date: e.value,
-                    durationDays: _durations[e.key],
-                    onRemove: () => _removeAt(e.key),
-                    onEditDuration: () => _editDuration(e.key),
+                    durationDays: durations[e.key],
+                    onRemove: () => _removeAt(ref, e.key, dates, durations),
+                    onEditDuration: () => _editDuration(
+                        context, ref, e.key, e.value, durations[e.key]),
                   ),
                 ),
               ),
 
-          if (_dates.length < 5)
+          if (dates.length < 5)
             OutlinedButton.icon(
-              onPressed: _addDate,
+              onPressed: () => _addDate(context, ref),
               icon: const Icon(Icons.add_rounded),
               label: const Text('Add past period'),
             ),
         ],
       ),
       primaryAction: FilledButton(
-        onPressed: _onContinue,
+        onPressed: () => context.push('/onboarding/regularity'),
         child: const Text('Continue'),
       ),
       secondaryAction: TextButton(
@@ -164,6 +82,76 @@ class _OnboardingHistoryScreenState
         child: const Text('Skip for now'),
       ),
     );
+  }
+
+  // ── Actions ────────────────────────────────────────────────────────────────
+
+  Future<void> _addDate(BuildContext context, WidgetRef ref) async {
+    final data = ref.read(onboardingProvider);
+    if (data.pastPeriods.length >= 5) return;
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().subtract(const Duration(days: 30)),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().subtract(const Duration(days: 7)),
+      helpText: 'Past period start date',
+    );
+    if (picked == null) return;
+
+    final currentDates = ref.read(onboardingProvider).pastPeriods;
+    final currentDurs = ref.read(onboardingProvider).pastPeriodDurations;
+    final defaultDur = ref.read(onboardingProvider).periodDays;
+
+    final newDates = [...currentDates, picked];
+    final newDurs = [
+      ...(currentDurs.isNotEmpty
+          ? currentDurs
+          : List.filled(currentDates.length, defaultDur)),
+      defaultDur,
+    ];
+
+    // Keep sorted newest-first.
+    final paired = List.generate(
+      newDates.length,
+      (i) => (date: newDates[i], dur: newDurs[i]),
+    )..sort((a, b) => b.date.compareTo(a.date));
+
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.setPastPeriods(paired.map((e) => e.date).toList());
+    notifier.setPastPeriodDurations(paired.map((e) => e.dur).toList());
+  }
+
+  void _removeAt(WidgetRef ref, int index, List<DateTime> dates,
+      List<int> durations) {
+    final newDates = List<DateTime>.from(dates)..removeAt(index);
+    final newDurs = List<int>.from(durations)..removeAt(index);
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.setPastPeriods(newDates);
+    notifier.setPastPeriodDurations(newDurs);
+  }
+
+  Future<void> _editDuration(BuildContext context, WidgetRef ref, int index,
+      DateTime date, int currentDays) async {
+    final result = await showDialog<int>(
+      context: context,
+      builder: (_) =>
+          _DurationDialog(date: date, initialDays: currentDays),
+    );
+    if (result == null) return;
+    final durations = List<int>.from(ref.read(onboardingProvider).pastPeriodDurations);
+    if (index < durations.length) {
+      durations[index] = result;
+      ref.read(onboardingProvider.notifier).setPastPeriodDurations(durations);
+    }
+  }
+
+  static String _accuracyLabel(int count) {
+    if (count == 0) return '±5–7 days';
+    if (count == 1) return '±4 days';
+    if (count == 2) return '±3 days';
+    if (count == 3) return '±2 days';
+    return '±1–2 days';
   }
 }
 
@@ -195,6 +183,7 @@ class _DateChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
+        color: cs.surfaceContainerLow,
         border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -205,7 +194,6 @@ class _DateChip extends StatelessWidget {
           Expanded(
             child: Text(dateLabel, style: theme.textTheme.bodyMedium),
           ),
-          // Duration badge — tappable to edit
           GestureDetector(
             onTap: onEditDuration,
             child: Container(
@@ -297,11 +285,11 @@ class _DurationDialogState extends State<_DurationDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('2 days',
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant)),
               Text('10 days',
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant)),
             ],
           ),
         ],

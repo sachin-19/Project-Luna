@@ -43,6 +43,14 @@ class CycleDao extends DatabaseAccessor<AppDatabase> with _$CycleDaoMixin {
         CycleEntriesTableCompanion(cycleLength: Value(cycleLength)),
       );
 
+  /// Records how many days the menstrual flow lasted WITHOUT closing the cycle.
+  /// The cycle row keeps endDate = null so phase calculations continue working
+  /// for the follicular / ovulation / luteal days that follow.
+  Future<void> updatePeriodLength(int id, int periodLength) =>
+      (update(cycleEntriesTable)..where((t) => t.id.equals(id))).write(
+        CycleEntriesTableCompanion(periodLength: Value(periodLength)),
+      );
+
   Future<List<PeriodDayRow>> getPeriodDaysForCycle(int cycleId) =>
       (select(periodDayLogsTable)
             ..where((t) => t.cycleEntryId.equals(cycleId))

@@ -158,5 +158,23 @@
   "periodEndConfirmTitle": "End your period?",
   "periodEndConfirmBody": "Mark today as your last day. Your flow data will be saved.",
   "periodEndConfirm": "End period",
-  "periodEndedSuccess": "Period marked as ended"
+  "periodEndedSuccess": "Period marked as ended",
+
+  "periodDateBeforeCycleStart": "Date before current cycle start",
+  "periodDateBeforeCycleStartHint": "You can only log flow days after your cycle started.",
+
+  "editStartDate": "Wrong start date? Edit",
+  "editStartDateTitle": "Edit cycle start date",
+  "editStartDateSuccess": "Cycle start date updated",
+
+  "editEndDate": "Period still going? Correct end date",
+  "editEndDateTitle": "Edit period end date",
+  "editEndDateSuccess": "Period end date updated",
+
+  "editDateError": "Could not update: {reason}",
+  "@editDateError": {
+    "placeholders": {
+      "reason": { "type": "String" }
+    }
+  }
 }

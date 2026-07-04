@@ -332,30 +332,32 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get periodDateBeforeCycleStart =>
-      'यह तारीख आपके मौजूदा पीरियड शुरू होने से पहले की है';
+      'तारीख वर्तमान चक्र शुरू होने से पहले की है';
 
   @override
   String get periodDateBeforeCycleStartHint =>
-      'आप केवल अपने मौजूदा पीरियड की तारीखों में फ्लो दर्ज कर सकती हैं।';
+      'आप केवल अपने चक्र के शुरू होने के बाद की तारीखें लॉग कर सकती हैं।';
 
   @override
-  String get editStartDate => 'शुरुआती तारीख गलत? सुधारें';
+  String get editStartDate => 'गलत शुरुआत की तारीख? संपादित करें';
 
   @override
-  String get editStartDateTitle => 'पीरियड शुरू होने की तारीख सुधारें';
+  String get editStartDateTitle => 'चक्र शुरू होने की तारीख संपादित करें';
 
   @override
-  String get editStartDateSuccess => 'शुरुआती तारीख अपडेट हो गई';
+  String get editStartDateSuccess => 'चक्र शुरू होने की तारीख अपडेट हो गई';
 
   @override
-  String get editEndDate => 'पीरियड अभी भी जारी है? अंतिम तारीख सुधारें';
+  String get editEndDate => 'पीरियड अभी भी जारी है? अंत की तारीख सुधारें';
 
   @override
-  String get editEndDateTitle => 'पीरियड समाप्त होने की तारीख सुधारें';
+  String get editEndDateTitle => 'पीरियड खत्म होने की तारीख संपादित करें';
 
   @override
-  String get editEndDateSuccess => 'अंतिम तारीख अपडेट हो गई';
+  String get editEndDateSuccess => 'पीरियड खत्म होने की तारीख अपडेट हो गई';
 
   @override
-  String editDateError(String reason) => 'तारीख अपडेट नहीं हो सकी। $reason';
+  String editDateError(String reason) {
+    return 'अपडेट नहीं हो सका: $reason';
+  }
 }

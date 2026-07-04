@@ -180,8 +180,10 @@ class LogNotifier extends StateNotifier<LogState> {
 
   void setNotes(String notes) => state = state.copyWith(notes: notes);
 
-  /// Saves any pending flow for today, counts logged period days, then closes
-  /// the active cycle with today as the end date.
+  /// Saves any pending flow for today and records the period length.
+  /// The cycle row is intentionally left open (endDate stays null) so that
+  /// phase calculations for follicular / ovulation / luteal continue working.
+  /// The cycle is only closed by start_new_cycle.dart when the next period begins.
   Future<bool> endPeriod() async {
     final cycle = _ref.read(activeCycleProvider).valueOrNull;
     if (cycle == null) return false;
@@ -200,9 +202,9 @@ class LogNotifier extends StateNotifier<LogState> {
         );
       }
 
-      // Use actual logged days for periodLength — more accurate than date math.
+      // Record period length from actual logged days — do NOT set endDate.
       final periodDays = await db.cycleDao.getPeriodDaysForCycle(cycle.id);
-      await db.cycleDao.updateCycleEnd(cycle.id, dateStr, periodDays.length);
+      await db.cycleDao.updatePeriodLength(cycle.id, periodDays.length);
 
       _ref.invalidate(insightsProvider);
       return true;
