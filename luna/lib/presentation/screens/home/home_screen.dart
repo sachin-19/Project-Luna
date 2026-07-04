@@ -5,7 +5,7 @@ import '../../../core/constants/enums.dart';
 import '../../../core/extensions/enums_l10n.dart';
 import '../../../core/extensions/l10n.dart';
 import '../../../core/utils/cycle_calculator.dart';
-import '../../../data/providers.dart';
+import '../../../data/database/database_provider.dart';
 import '../../providers/cycle_provider.dart';
 import '../../providers/estimator_provider.dart';
 import '../../providers/insight_provider.dart';

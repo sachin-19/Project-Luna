@@ -2,7 +2,7 @@ name: luna
 description: Luna — Period & Cycle Tracker. India-first, local-first, AI-integrated.
 publish_to: 'none'
 
-version: 1.0.9+10
+version: 1.1.0+1
 
 environment:
   sdk: ^3.12.2
