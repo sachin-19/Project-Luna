@@ -51,6 +51,13 @@ class CycleDao extends DatabaseAccessor<AppDatabase> with _$CycleDaoMixin {
         CycleEntriesTableCompanion(periodLength: Value(periodLength)),
       );
 
+  /// Clears the endDate on a cycle row, re-opening it as the active cycle.
+  /// Used by the startup repair that undoes the old endPeriod() bug.
+  Future<void> clearCycleEndDate(int id) =>
+      (update(cycleEntriesTable)..where((t) => t.id.equals(id))).write(
+        CycleEntriesTableCompanion(endDate: Value(null)),
+      );
+
   Future<List<PeriodDayRow>> getPeriodDaysForCycle(int cycleId) =>
       (select(periodDayLogsTable)
             ..where((t) => t.cycleEntryId.equals(cycleId))

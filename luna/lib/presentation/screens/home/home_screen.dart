@@ -5,6 +5,7 @@ import '../../../core/constants/enums.dart';
 import '../../../core/extensions/enums_l10n.dart';
 import '../../../core/extensions/l10n.dart';
 import '../../../core/utils/cycle_calculator.dart';
+import '../../../data/providers.dart';
 import '../../providers/cycle_provider.dart';
 import '../../providers/estimator_provider.dart';
 import '../../providers/insight_provider.dart';
@@ -34,8 +35,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
+      await _repairBrokenCycleEnd();
       checkAndShowUpdateSheet(context, ref);
       _requestNotificationPermissionIfNeeded();
       _scheduleNotifications();
@@ -84,6 +86,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   void _syncIfAuthenticated() {
     ref.read(syncNotifierProvider.notifier).sync();
+  }
+
+  /// Repairs a database state left by the old endPeriod() bug, which
+  /// incorrectly set endDate on the active cycle when the period ended.
+  /// watchActiveCycle() queries WHERE endDate IS NULL, so it returned null
+  /// and the home screen was blank. This finds that cycle and re-opens it.
+  ///
+  /// Safe to run on every launch — it's a no-op once the cycle is already open
+  /// or once the next period has been logged (which creates a newer cycle).
+  Future<void> _repairBrokenCycleEnd() async {
+    final db = ref.read(databaseProvider);
+    final cycles = await db.cycleDao.getAllCycles(); // newest-first
+    if (cycles.isEmpty) return;
+
+    final mostRecent = cycles.first;
+    if (mostRecent.endDate == null) return; // already open, nothing to fix
+
+    // If any cycle started AFTER mostRecent.endDate, a new period was logged
+    // via start_new_cycle.dart which correctly set that endDate — leave it.
+    final hasNewerCycle = cycles
+        .skip(1)
+        .any((c) => c.startDate.compareTo(mostRecent.endDate!) > 0);
+    if (hasNewerCycle) return;
+
+    await db.cycleDao.clearCycleEndDate(mostRecent.id);
   }
 
   Future<void> _updateWidget() async {
